@@ -12,6 +12,8 @@ The following ports in the local network are used:
 
 ## Protocol details
 
+All details shown below are hex values, so 08 means 0x08 actually.
+
 ### Basic protocol structure
 
 All messages start with the prefix
@@ -121,9 +123,14 @@ Static message `00 00 00 03 03 00 00 1b` is sent via UDP broadcast to UDP 12141
 We did not saw a response... so unknown
 
 ### 15/16 Ping-Pong (TCP)
-00 00 00 03 03 00 00 15
 
-00 00 00 03 03 00 00 16
+The Ping-Pong is executed every 4s.
+
+**Request**
+`00 00 00 03 03 00 00 15`
+
+**Respone**
+`00 00 00 03 03 00 00 16`
 
 ### 90/91 Device serial data send (TCP)
 
@@ -160,10 +167,10 @@ It seems that after the first "90" request the device sends updated data itself 
 ### 93/94 Device extended serial data send (TCP)
 
 *Request*
-`00 00 00 03 08 00 00 93 00 00 00 ?? 02`
+`00 00 00 03 08 00 00 93 00 00 00 RR 02`
 
 We assume that also data are written to the serial portion of the device, but differently. In fact details unknown.
-From checking several requests the ?? byte changes and we saw 04 and 0C
+From checking several requests the RR byte changes and we saw 04 and 0C
 
 **Response**
 e.g. (with 04 in ?? from above)
@@ -171,9 +178,25 @@ e.g. (with 04 in ?? from above)
 
 The data after the prefix are:
 * `00 00`: unknown
-* `00 04`: unknown, second byte seems to be the same as sent in as ?? above
-* `03 00`: unknown
+* `00 04`: unknown, second byte seems to be the same as sent in as RR in request
+* `?? ??`: see description in "90/91" response
 * `02 dc`: PH value multiplied by 100: 732/100 = 7.32
 * `08 9d`: Redox value increased by 2000: 2205-2000 = 205 mV
 * `00 00`: unknown
 * `00 00`: unknown
+
+
+## Minimum Interaction scheme
+
+* 1 connect the device with WLAn via the app
+* 2 Do a TCP connection to device IP on port 12416
+* 3 Send `00 00 00 03 03 00 00 06`
+* 4 get response 
+* 5 change byte #8 is response from 0x07->0x08 and remember that one (then steps 3-5 are not needed again and the value can be send out directly)
+* 6 send that adjusted value to the device
+* 7 verify that response is `00 00 00 03 04 00 00 09 00`
+* 8 send `00 00 00 03 04 00 00 90 02` to device
+
+From now on you should get data of message type 91 delivered on changes.
+
+(If this is not the case on changes then we might also need to send message type 93 ... unverified)
