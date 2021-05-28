@@ -53,7 +53,11 @@ class TestServer {
 
     close() {
         return new Promise(resolve => {
-            this.sockets.forEach(sock => sock.destroy());
+            try {
+                this.sockets.forEach(sock => sock.destroy());
+            } catch {
+                // ignore
+            }
             this.server.close(() => {
                 debug('closed');
                 resolve(true);
@@ -83,6 +87,8 @@ class TestServer {
         });
 
         socket.on('close', () => debug('socket closed'));
+
+        socket.on('error', err => debug(`socket errored: ${err}`));
     }
 
     sendDataPerInterval(socket, timeout) {
