@@ -9,6 +9,9 @@ async function main() {
     device.on('data', data => {
         console.log('Data: ' + JSON.stringify(data));
     });
+    device.on('error', err => {
+        console.log('Error: ' + err);
+    });
     await device.retrieveData();
 }
 

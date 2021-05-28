@@ -1,5 +1,6 @@
 {
   "name": "node-ph803w",
+  "version": "0.0.1",
   "dependencies": {
     "debug": "^4.3.1"
   },
@@ -16,7 +17,7 @@
   },
   "scripts": {
     "lint": "eslint \"*.js\" \"lib/**/*.js\"",
-    "test": "nyc --reporter=lcov node_modules/mocha/bin/mocha --exit"
+    "test": "DEBUG=ph803w* nyc --reporter=lcov node_modules/mocha/bin/mocha --exit"
   },
   "readme": "README.md"
 }
