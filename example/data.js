@@ -8,12 +8,12 @@ async function main() {
     device.on('data', data => {
         console.log('Data: ' + JSON.stringify(data));
     });
+    device.on('connected', async () => {
+        await device.login();
+        await device.retrieveData();
+    });
 
     await device.connect();
-
-    await device.login();
-
-    await device.retrieveData();
 }
 
 if (process.argv.length !== 3) {
