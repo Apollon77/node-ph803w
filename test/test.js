@@ -3,6 +3,7 @@ const chai = require('chai');
 const expect = chai.expect;
 const TestServer = require('./lib/testServer');
 const PH803WDevice = require('../lib/device');
+const PH803WDiscovery = require('../lib/discovery');
 
 describe('PH803-W Test', function() {
     let testServer;
@@ -10,6 +11,26 @@ describe('PH803-W Test', function() {
     before('init server', async () => {
         testServer = new TestServer();
         await testServer.open();
+    });
+
+    it('parse discovery message', done => {
+        const discovery = new PH803WDiscovery();
+
+        discovery.on('error', err => {
+            // todo
+        });
+
+        discovery.on('data', (data, remote) => {
+            expect(data.id1).to.equal('CFqpJTSymCE9PLlp1DpbhY');
+            expect(data.id2).to.equal('2d3d954d9bb741b4a19ba1153104932b');
+            expect(data.apiServer).to.equal('api.gizwits.com:80');
+            expect(data.version).to.equal('4.0.8');
+            expect(data.ip).to.equal('127.0.0.1');
+            done();
+        });
+
+        const data = Buffer.from('00000003680000040016434671704a5453796d434539504c6c703144706268590006483fda87dc4700000020326433643935346439626237343162346131396261313135333130343933326200000000000000026170692e67697a776974732e636f6d3a383000342e302e3800', 'hex');
+        discovery.parseResponse(data, {address: '127.0.0.1'});
     });
 
     it('connect and disconnect', async () => {

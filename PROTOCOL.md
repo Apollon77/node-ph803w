@@ -73,7 +73,7 @@ The device answers with a data package which was kind of static on different tim
 
 Content mainly unknown, but it contains the api domain from gizwits (api.gizwits.com:80) and as last part a version number (4.0.8)
 
-* `00 00 04 00`: 4 bytes unknown
+* `00 00 04 00`: message type 4
 * `16 XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX 00`: String with length identifier as first byte?, the same content is used for the cloud MQTT messages, so also seems to be a device id, NULL terminated?
 * `06 48 3f da 87 dc 47 00 00 00`: 10 bytes unknown
 * `XX XX XX XX XX XX XX XX XX Xx XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX`: 32 bytes Device ID or a hash? to be verified
