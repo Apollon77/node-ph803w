@@ -6,9 +6,11 @@ discovery.on('error', err => {
     console.log(`ERROR: ${err}`);
 });
 
-discovery.on('device', (data, remote) => {
-    console.log(`PH803W Device discovered on ${remote.address}`);
+discovery.on('device', data => {
+    console.log(`PH803W Device discovered on ${data.ip}`);
     console.log(JSON.stringify(data));
 });
+
+console.log('Discover PH803W devices ... CTRL-C to quit');
 
 discovery.discover();
