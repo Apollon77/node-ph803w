@@ -126,8 +126,8 @@ describe('PH803-W Device Test', function() {
             if (!eventCounter) {
                 expect(data.ph).to.equal(7.32);
                 expect(data.redox).to.equal(205);
-                expect(data.phSwitch).to.be.true;
-                expect(data.redoxSwitch).to.be.true;
+                expect(data.phOutlet).to.be.true;
+                expect(data.redoxOutlet).to.be.true;
             }
             eventReceived = true;
             eventCounter++;
@@ -137,8 +137,8 @@ describe('PH803-W Device Test', function() {
         expect(data).to.exist;
         expect(data.ph).to.equal(7.32);
         expect(data.redox).to.equal(205);
-        expect(data.phSwitch).to.be.true;
-        expect(data.redoxSwitch).to.be.true;
+        expect(data.phOutlet).to.be.true;
+        expect(data.redoxOutlet).to.be.true;
 
         return new Promise((resolve, reject) => {
             setTimeout(async () => {
