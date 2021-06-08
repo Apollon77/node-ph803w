@@ -15,7 +15,7 @@ discovery.on('error', err => {
 });
 
 discovery.on('device', data => {
-    console.log(`PH803W Device discovered on ${data.ip}`);
+    console.log(`PH803W Device ${data.id} discovered on ${data.ip}`);
     console.log(JSON.stringify(data));
 });
 
