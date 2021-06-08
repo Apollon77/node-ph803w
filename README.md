@@ -27,7 +27,7 @@ Available examples (see example folder):
 
 ## Changelog
 
-### __WORK IN PROGRESS__
+### 0.2.1 (2021-06-08)
 * (Apollon77) BREAKING: Rename redoxSwitch/phSwitch to redoxOutlet/phOutlet in data response
 
 ### 0.1.2 (2021-06-08)
