@@ -27,7 +27,7 @@ Available examples (see example folder):
 
 ## Changelog
 
-### __WORK IN PROGRESS__
+### 0.2.2 (2021-06-08)
 * (Apollon77) enhance test server
 
 ### 0.2.1 (2021-06-08)
