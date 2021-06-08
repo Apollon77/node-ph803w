@@ -126,7 +126,9 @@ class TestServer {
      */
     _sendDataPerInterval(socket, timeout) {
         this.dataSendTimeout = setTimeout(() => {
-            socket.write(dataResponses[Math.floor(Math.random() * dataResponses.length)]);
+            const data = dataResponses[Math.floor(Math.random() * dataResponses.length)];
+            debug(`Send out random new data: ${data.toString('hex')}`);
+            socket.write(data);
             this._sendDataPerInterval(socket, 6000);
         }, timeout || 6000);
     }
