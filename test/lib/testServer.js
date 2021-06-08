@@ -28,6 +28,7 @@ class TestServer {
      *
      * @param {object} [options] Options object to set/overwrite some settings, IP needs to be provided as first parameter or as part of this object
      * @param {number} [options.port=12416] Port of the device, defaults to 12416 if not provided
+     * @param {number} [options.bindAddress='127.0.0.1'] Bind address for the device, defaults to '127.0.0.1' if not provided
      */
     constructor(options) {
         this.options = options || {};
@@ -57,7 +58,7 @@ class TestServer {
                 throw err;
             });
 
-            this.server.listen(this.options.port || DEFAULT_PORT, '127.0.0.1', () => {
+            this.server.listen(this.options.port || DEFAULT_PORT, this.options.bindAddress || '127.0.0.1', () => {
                 debug(`listening on ${JSON.stringify(this.server.address())}`);
                 connected = true;
                 resolve(true);

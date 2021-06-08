@@ -27,6 +27,9 @@ Available examples (see example folder):
 
 ## Changelog
 
+### __WORK IN PROGRESS__
+* (Apollon77) enhance test server
+
 ### 0.2.1 (2021-06-08)
 * (Apollon77) BREAKING: Rename redoxSwitch/phSwitch to redoxOutlet/phOutlet in data response
 
