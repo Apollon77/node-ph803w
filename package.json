@@ -9,8 +9,8 @@
     "@types/chai": "^4.2.18",
     "@types/chai-as-promised": "^7.1.4",
     "@types/mocha": "^8.2.2",
-    "@types/node": "^15.6.0",
-    "eslint": "^7.27.0",
+    "@types/node": "^15.12.2",
+    "eslint": "^7.28.0",
     "mocha": "^8.4.0",
     "chai": "^4.3.4",
     "nyc": "^15.1.0"
