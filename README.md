@@ -15,5 +15,13 @@ Please see [Protocol page](PROTOCOL.md).
 
 ## Usage
 
+The library is documented in code (Apidoc) and example scripts show the usage
+
+Available examples (see example folder):
+* data.js: Skript to connect to a device via IP, authenticate and retrieve data
+* discovery.js: Skript to discover devices in the network
 
 ## Changelog
+
+### __WORK IN PROGRESS__
+* (Apollon77) Initial release

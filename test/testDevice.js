@@ -12,12 +12,53 @@ describe('PH803-W Device Test', function() {
         await testServer.open();
     });
 
-    it('connect and disconnect', async () => {
+    it('connect and disconnect incl events', done => {
         const device = new PH803WDevice('127.0.0.1');
-        await device.connect();
 
-        await device.close(false);
+        device.on('connected', () => {
+            device.close(false);
+        });
+
+        device.on('disconnected', () => {
+            done();
+        });
+
+        device.connect();
     });
+
+    it('connect and reconnect', done => {
+        const device = new PH803WDevice({
+            ip: '127.0.0.1',
+            reconnectDelay: 1000
+        });
+
+        let connectCnt = 0;
+        let disconnectCnt = 0;
+        let closed = false;
+
+        device.on('error', err => console.log(`ERROR: ${err}`));
+
+        device.on('connected', async () => {
+            connectCnt++;
+            if (connectCnt === 1) {
+                await testServer.close();
+                await testServer.open();
+            } else if (connectCnt === 2) {
+                closed = true;
+                await device.close(false);
+            }
+        });
+
+        device.on('disconnected', () => {
+            disconnectCnt++;
+            expect(disconnectCnt).to.equal(connectCnt);
+            if (closed) {
+                done();
+            }
+        });
+
+        device.connect();
+    }).timeout(3000);
 
     it('connect and login with passcode negotiation', async () => {
         const device = new PH803WDevice('127.0.0.1');

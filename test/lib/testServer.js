@@ -19,7 +19,16 @@ const dataResponses = [
     Buffer.from('000000030d000091030002dc089d00000000', 'hex')
 ];
 
+/**
+ * Server to emulate a PH803W device for testing
+ */
 class TestServer {
+    /**
+     * Constructor
+     *
+     * @param {object} [options] Options object to set/overwrite some settings, IP needs to be provided as first parameter or as part of this object
+     * @param {number} [options.port=12416] Port of the device, defaults to 12416 if not provided
+     */
     constructor(options) {
         this.options = options || {};
 
@@ -30,10 +39,15 @@ class TestServer {
         this.dataSendTimeout = null;
     }
 
+    /**
+     * Open TCP server
+     *
+     * @returns {Promise<boolean>}
+     */
     open() {
         let connected = false;
         return new Promise((resolve, reject) => {
-            this.server = net.createServer(socket => this.handleSocketData(socket));
+            this.server = net.createServer(socket => this._handleSocketData(socket));
             this.server.on('error', err => {
                 if (!connected) {
                     reject(err);
@@ -51,6 +65,11 @@ class TestServer {
         });
     }
 
+    /**
+     * Close TCP server
+     *
+     * @returns {Promise<boolean>}
+     */
     close() {
         return new Promise(resolve => {
             try {
@@ -65,7 +84,13 @@ class TestServer {
         });
     }
 
-    handleSocketData(socket) {
+    /**
+     * Handle connected Sockets and handle prepared responses
+     *
+     * @param {Socket} socket connected Socket
+     * @private
+     */
+    _handleSocketData(socket) {
         debug('socket connected');
         this.sockets.push(socket);
         socket.on('data', data => {
@@ -81,7 +106,7 @@ class TestServer {
                 socket.write(requestResponse[dataStr]);
 
                 if (dataStr === '000000030400009002' && !this.dataSendTimeout) {
-                    this.sendDataPerInterval(socket);
+                    this._sendDataPerInterval(socket);
                 }
             }
         });
@@ -91,13 +116,23 @@ class TestServer {
         socket.on('error', err => debug(`socket errored: ${err}`));
     }
 
-    sendDataPerInterval(socket, timeout) {
+    /**
+     * Send new data in regular intervals
+     *
+     * @param {Socket} socket Socket to send data to
+     * @param {number} timeout Timeout in ms in which data are sent
+     * @private
+     */
+    _sendDataPerInterval(socket, timeout) {
         this.dataSendTimeout = setTimeout(() => {
             socket.write(dataResponses[Math.floor(Math.random() * dataResponses.length)]);
-            this.sendDataPerInterval(socket, 6000);
+            this._sendDataPerInterval(socket, 6000);
         }, timeout || 6000);
     }
 
+    /**
+     * Reset the collected "lastDataPackets"
+     */
     resetLastDataPackets() {
         this.lastDataPackets = [];
     }
