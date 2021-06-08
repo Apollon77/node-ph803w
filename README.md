@@ -1,4 +1,10 @@
 # node-ph803w
+[![NPM version](http://img.shields.io/npm/v/daikin-controller.svg)](https://www.npmjs.com/package/node-ph803w)
+[![Downloads](https://img.shields.io/npm/dm/node-ph803w.svg)](https://www.npmjs.com/package/node-ph803w)
+![Test and Release](https://github.com/Apollon77/node-ph803w/workflows/Test%20and%20Release/badge.svg)
+[![Test Coverage](https://codeclimate.com/github/Apollon77/node-ph803w/badges/coverage.svg)](https://codeclimate.com/github/Apollon77/node-ph803w/coverage)
+
+
 Library to interact locally with PH-803W devices
 
 ## Device details
