@@ -68,9 +68,9 @@ jobs:
         run: npm test
 
       - name: Publish code coverage
-          uses: paambaati/codeclimate-action@v2.7.5
-          env:
-            CC_TEST_REPORTER_ID: ece31de3a0b7452a4a1eb2a0f86aa5d8ddfda548f41954b0f748ba4cffadc6e2
+        uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: ece31de3a0b7452a4a1eb2a0f86aa5d8ddfda548f41954b0f748ba4cffadc6e2
 
   # Deploys the final package to NPM
   deploy:
