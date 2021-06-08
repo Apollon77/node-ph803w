@@ -29,5 +29,8 @@ Available examples (see example folder):
 
 ## Changelog
 
+### __WORK IN PROGRESS__
+* (Apollon77) Add handling of parallel received data packages
+
 ### 0.1.0 (2021-06-08)
 * (Apollon77) Initial release
