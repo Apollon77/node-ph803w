@@ -17,7 +17,8 @@
   },
   "scripts": {
     "lint": "eslint \"*.js\" \"lib/**/*.js\"",
-    "test": "DEBUG=ph803w* nyc --reporter=lcov node_modules/mocha/bin/mocha --exit"
+    "test": "DEBUG=ph803w* nyc --reporter=lcov node_modules/mocha/bin/mocha --exit",
+    "release": "release-script"
   },
   "readme": "README.md"
 }
