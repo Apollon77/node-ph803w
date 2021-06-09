@@ -30,7 +30,7 @@ Available examples (see example folder):
 
 ## Changelog
 
-### 0.2.4 (2021-06-09)
+### __WORK IN PROGRESS__
 * (Apollon77) trigger disconnected event also on pingpong related reconnects
 
 ### 0.2.3 (2021-06-08)
