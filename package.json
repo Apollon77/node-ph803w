@@ -2,7 +2,7 @@
   "name": "node-ph803w",
   "version": "0.2.5",
   "dependencies": {
-    "debug": "^4.3.3"
+    "debug": "^4.3.4"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.5.6",
