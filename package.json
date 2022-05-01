@@ -5,7 +5,7 @@
     "debug": "^4.3.4"
   },
   "devDependencies": {
-    "@alcalzone/release-script": "^3.5.6",
+    "@alcalzone/release-script": "^3.5.8",
     "@alcalzone/release-script-plugin-license": "^3.5.8",
     "@types/chai": "^4.3.1",
     "@types/chai-as-promised": "^7.1.5",
