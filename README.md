@@ -30,6 +30,9 @@ Available examples (see example folder):
 
 ## Changelog
 
+### __WORK IN PROGRESS__
+* (Apollon77) add isConnected method to device to return the connection status of the device
+
 ### 0.2.5 (2021-06-09)
 * (Apollon77) trigger disconnected event also on pingpong related reconnects
 
