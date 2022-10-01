@@ -12,6 +12,10 @@ describe('PH803-W Discovery Test', function() {
         await testServer.open();
     });
 
+    /*
+     * If you have a firewall, you may need to allow responses with:
+     *   sudo ufw allow proto udp to 0.0.0.0/0 port 12414
+     */
     it('test udp discovery', done => {
         const discovery = new PH803WDiscovery();
 
