@@ -21,14 +21,16 @@ describe('PH803-W Discovery Test', function() {
 
         discovery.on('error', err => console.log(`ERROR: ${err}`));
 
-        discovery.on('device', async data => {
+        new Promise(resolve => {
+            discovery.on('device', resolve);
+        }).then(async data => {
             expect(data.id).to.equal('CFqpJTSymCE9PLlp1DpbhY');
             expect(data.data3).to.equal('2d3d954d9bb741b4a19ba1153104932b');
             expect(data.apiServer).to.equal('api.gizwits.com:80');
             expect(data.version).to.equal('4.0.8');
             await discovery.stop();
             done();
-        });
+        }).catch(done);
 
         discovery.discover();
     });
