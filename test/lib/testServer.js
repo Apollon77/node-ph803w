@@ -112,7 +112,10 @@ class TestServer {
             }
         });
 
-        socket.on('close', () => debug('socket closed'));
+        socket.on('close', () => {
+            debug('socket closed');
+            clearTimeout(this.dataSendTimeout);
+        });
 
         socket.on('error', err => debug(`socket errored: ${err}`));
     }
