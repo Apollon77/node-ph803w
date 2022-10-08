@@ -7,8 +7,15 @@ const requestResponse = {
     '0000000303000006': Buffer.from('000000030f000007000a49505152535455565758', 'hex'), // Passcode 06/07
     '000000030f000008000a49505152535455565758':  Buffer.from('000000030400000900', 'hex'), // Login OK
     '000000030f000008000a49505152535455565759':  Buffer.from('000000030400000901', 'hex'), // Login Error
+    '000000030e0000080009424144484541444552':  Buffer.from('000000020400000900', 'hex'), // Bad header
+    '0000000310000008000b53484f5254484541444552':  Buffer.from('000000', 'hex'), // Short header
+    '0000000310000008000b53484f52544c454e475448':  Buffer.from('00000003FF', 'hex'), // Short length
+    '000000030c000008000742414444415441':  Buffer.from('00000003030000FF', 'hex'), // Bad data
+    '000000030e000008000953484f525444415441':  Buffer.from('0000000304000', 'hex'), // Short data
+    '000000030f000008000a444f54484553504c4954':  Buffer.from('000000030400000900000000031100009412345678030302dc089d00000000', 'hex'), // Login OK, and additional Data 94
     '0000000303000015':  Buffer.from('0000000303000016', 'hex'), // Ping, Pong 15/16
-    '000000030400009002':  Buffer.from('000000030d000091030302dc089d00000000', 'hex') // Ping, Pong 15/16
+    '000000030400009002':  Buffer.from('000000030d000091030302dc089d00000000', 'hex'), // Data transmit 90/91
+    // '00000003040000931234567802':  Buffer.from('000000031100009412345678030302dc089d00000000', 'hex'), // Data control 93/94
 };
 
 const dataResponses = [
@@ -109,6 +116,8 @@ class TestServer {
                 if (dataStr === '000000030400009002' && !this.dataSendTimeout) {
                     this._sendDataPerInterval(socket);
                 }
+            } else {
+                debug('ERROR: unexpected data!');
             }
         });
 
