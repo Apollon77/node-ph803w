@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gizwits Open API - /app/datapoint - get - responses - 200",
+  "version": "2.36.0",
+  "description": "Get product data point definitions\n\nsuccess",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Product name"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/EntityItem"
+      }
+    },
+    "protocolType": {
+      "type": "string",
+      "description": "hard code, standard\n"
+    },
+    "product_key": {
+      "type": "string"
+    },
+    "packetVersion": {
+      "type": "string",
+      "description": "hard code, 0x00000004\n"
+    },
+    "ui": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "integer",
+              "description": "hard code, 4\n"
+            },
+            "showEditButton": {
+              "type": "boolean",
+              "description": "hard code, false\n"
+            }
+          }
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SectionItem"
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "AttrItem": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Data point identifier\n"
+        },
+        "name": {
+          "type": "string",
+          "description": "Data point name\n"
+        },
+        "display_name": {
+          "type": "string",
+          "description": "Data point display name\n"
+        },
+        "desc": {
+          "type": "string",
+          "description": "hard code, .....\n"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "status_writable",
+            "status_readonly",
+            "alert",
+            "fault"
+          ],
+          "description": "- status_writable: writable\n- status_readonly: readonly\n- alert: alert\n- fault: fault\n"
+        },
+        "data_type": {
+          "type": "string",
+          "enum": [
+            "bool",
+            "uint8",
+            "uint16",
+            "uint32",
+            "enum",
+            "binary"
+          ]
+        },
+        "uint_spec": {
+          "type": "object",
+          "description": "When data_type is uint8/uint16/uint32, there is this field\n",
+          "properties": {
+            "min": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            },
+            "ratio": {
+              "type": "number"
+            },
+            "addition": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "enum": {
+          "type": "array",
+          "description": "When data_type is enum, there is this field\n",
+          "items": {
+            "type": "string"
+          }
+        },
+        "position": {
+          "type": "object",
+          "properties": {
+            "bit_offset": {
+              "type": "integer"
+            },
+            "len": {
+              "type": "integer"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "bit",
+                "byte"
+              ]
+            },
+            "byte_offset": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "EntityItem": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "hard code, 0\n"
+        },
+        "name": {
+          "type": "string",
+          "description": "hard code, entity0\n"
+        },
+        "display_name": {
+          "type": "string",
+          "description": "hard code, Gizwits Development Kit\n"
+        },
+        "attrs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttrItem"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ElementItem": {
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Data point display name\n"
+        },
+        "key": {
+          "type": "string",
+          "description": "entity0.{data point identifier}\n"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "QBooleanElement",
+            "QFloatElement",
+            "QRadioElement",
+            "QMultilineElement",
+            "QLabelElement"
+          ]
+        },
+        "keyboardType": {
+          "type": "string",
+          "enum": [
+            "NumbersAndPunctuation",
+            "PhonePad"
+          ]
+        },
+        "maxLength": {
+          "type": "integer",
+          "description": "QMultilineElement only has this field\n"
+        },
+        "items": {
+          "type": "array",
+          "description": "QRadioElement only has this field\n",
+          "items": {
+            "type": "string"
+          }
+        },
+        "boolValue": {
+          "type": "boolean",
+          "description": "type 为 QBooleanElement only has this field\n"
+        },
+        "bind": {
+          "type": "string",
+          "description": "type 为 QFloatElement when floatValue:float\n"
+        },
+        "maximumValue": {
+          "type": "number",
+          "description": "type 为 QFloatElement only has this field\n"
+        },
+        "minimumValue": {
+          "type": "number",
+          "description": "type 为 QFloatElement only has this field\n"
+        },
+        "value": {
+          "type": "integer",
+          "description": "type 为 QFloatElement only has this field，为 0\n"
+        },
+        "object": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "hard code, entity0\n"
+            },
+            "bind": {
+              "type": "array",
+              "description": "hard code, entity0.{data point name}\n",
+              "items": {
+                "type": "string"
+              }
+            },
+            "perm": {
+              "type": "string",
+              "enum": [
+                "W",
+                "R",
+                "N",
+                "E"
+              ],
+              "description": "- W: writable\n- R: readonly\n- N: alert\n- E: fault\n"
+            },
+            "unit_spec": {
+              "type": "object",
+              "description": "QFloatElement only has this field\n",
+              "properties": {
+                "max": {
+                  "type": "integer"
+                },
+                "step": {
+                  "type": "integer"
+                },
+                "min": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "SectionItem": {
+      "properties": {
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ElementItem"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

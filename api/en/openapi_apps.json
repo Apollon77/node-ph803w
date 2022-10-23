@@ -1,0 +1,1787 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gizwits Open API",
+  "version": "2.36.0",
+  "description": "This page is the debugging page of Gizwits Open API, which contains a list of all Open API interfaces you can call.\n\nTo view the Open API Guidelines, please click [Open API Guidelines](http://docs.gizwits.com/en-us/cloud/OpenAPI.html).\n",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "The version of this schema that will be used to validate JSON data"
+    },
+    "createUserForm": {
+      "$ref": "#/definitions/CreateUserForm",
+      "description": "user info"
+    },
+    "userTokenModel": {
+      "$ref": "#/definitions/UserTokenModel",
+      "description": "Successfully obtained token"
+    },
+    "updateUserForm": {
+      "$ref": "#/definitions/UpdateUserForm",
+      "description": "user info"
+    },
+    "undefined-1": {
+      "properties": {
+        "updatedAt": {
+          "type": "string",
+          "description": "2011-11-07T21:25:10.623Z"
+        }
+      },
+      "description": "update success"
+    },
+    "userModel": {
+      "$ref": "#/definitions/UserModel",
+      "description": "Successfully obtained user information"
+    },
+    "loginForm": {
+      "$ref": "#/definitions/LoginForm",
+      "description": "login information"
+    },
+    "undefined-2": {
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "expired_at": {
+          "type": "integer"
+        }
+      },
+      "description": "Successfully obtained Token"
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "scene_name": {
+          "type": "string",
+          "description": "场景名称"
+        },
+        "remark": {
+          "type": "string",
+          "description": "场景备注"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SceneTask"
+          },
+          "description": "场景任务"
+        }
+      }
+    },
+    "undefined-3": {
+      "properties": {
+        "captcha_url": {
+          "type": "string",
+          "description": "验证码图片 URL"
+        },
+        "captcha_id": {
+          "type": "string"
+        }
+      },
+      "description": "success"
+    },
+    "messageList": {
+      "$ref": "#/definitions/MessageList",
+      "description": "成功获取消息列表"
+    },
+    "deviceItem": {
+      "$ref": "#/definitions/DeviceItem",
+      "description": "success"
+    },
+    "undefined-4": {
+      "properties": {
+        "success": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "success"
+    },
+    "deviceList": {
+      "$ref": "#/definitions/DeviceList",
+      "description": "success"
+    },
+    "modifyBindingForm": {
+      "$ref": "#/definitions/ModifyBindingForm",
+      "description": "success"
+    },
+    "bindingUserList": {
+      "$ref": "#/definitions/BindingUserList",
+      "description": "success"
+    },
+    "undefined-5": {
+      "properties": {
+        "did": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "attr": {
+          "type": "object",
+          "description": "设备数据点 key-value"
+        }
+      },
+      "description": "success"
+    },
+    "dataPoint": {
+      "$ref": "#/definitions/DataPoint",
+      "description": "success"
+    },
+    "deviceRTData": {
+      "$ref": "#/definitions/DeviceRTData",
+      "description": "success"
+    },
+    "sharingDeviceList": {
+      "$ref": "#/definitions/SharingDeviceList",
+      "description": "成功获取分享信息"
+    },
+    "undefined-6": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "分享记录id，针对普通分享才有"
+        },
+        "qr_content": {
+          "type": "string",
+          "description": "二维码图片内容，针对二维码分享才有"
+        }
+      },
+      "description": "success"
+    },
+    "undefined-7": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "分享记录id"
+        }
+      },
+      "description": "success"
+    },
+    "undefined-8": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "分享记录id"
+        }
+      },
+      "description": "success"
+    },
+    "sharingCodeModel": {
+      "$ref": "#/definitions/SharingCodeModel",
+      "description": "成功获取分享信息"
+    },
+    "groupList": {
+      "$ref": "#/definitions/GroupList",
+      "description": "成功获取设备分组信息"
+    },
+    "undefined-9": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "分组 id"
+        }
+      },
+      "description": "success"
+    },
+    "groupDevicesList": {
+      "$ref": "#/definitions/GroupDevicesList",
+      "description": "成功获取分组里面的设备列表"
+    },
+    "undefined-10": {
+      "properties": {
+        "success": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detail": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "did": {
+                "type": "string"
+              },
+              "error_code": {
+                "type": "integer"
+              },
+              "error_message": {
+                "type": "string"
+              },
+              "detail_msg": {
+                "type": "string",
+                "description": "- 添加失败的did的详细错误信息；\n- 只有请求参数设置了show_detail为1时候才会返回此字段；\n"
+              }
+            }
+          }
+        }
+      },
+      "description": "结果"
+    },
+    "undefined-11": {
+      "properties": {
+        "success": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "success"
+    },
+    "groupControlResultList": {
+      "$ref": "#/definitions/GroupControlResultList",
+      "description": "success"
+    },
+    "rulesList": {
+      "$ref": "#/definitions/RulesList",
+      "description": "成功获取规则列表"
+    },
+    "rules": {
+      "$ref": "#/definitions/Rules",
+      "description": "创建联动规则请求信息"
+    },
+    "undefined-12": {
+      "properties": {
+        "rule_id": {
+          "type": "integer",
+          "description": "联动规则id"
+        }
+      },
+      "description": "success"
+    },
+    "rulesUpdate": {
+      "$ref": "#/definitions/RulesUpdate",
+      "description": "修改联动规则请求信息"
+    },
+    "undefined-13": {
+      "properties": {
+        "rule_id": {
+          "type": "integer",
+          "description": "联动规则id"
+        }
+      },
+      "description": "success"
+    },
+    "undefined-14": {
+      "properties": {
+        "rule_id": {
+          "type": "integer",
+          "description": "联动规则id"
+        }
+      },
+      "description": "success"
+    },
+    "sceneList": {
+      "$ref": "#/definitions/SceneList",
+      "description": "成功获取用户场景信息"
+    },
+    "undefined-15": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "场景 id"
+        }
+      },
+      "description": "success"
+    },
+    "undefined-16": {
+      "properties": {
+        "status": {
+          "type": "integer",
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "description": "场景任务执行状态：0：进行中，1：执行完成，2：执行失败, 3：任务未在执行"
+        }
+      },
+      "description": "返回成功"
+    },
+    "deviceSchedulerList": {
+      "$ref": "#/definitions/DeviceSchedulerList",
+      "description": "success"
+    },
+    "deviceSchedulerForm": {
+      "$ref": "#/definitions/DeviceSchedulerForm",
+      "description": "定时任务"
+    },
+    "undefined-17": {
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "description": "返回定时任务 ID，用于后续的修改和删除操作\n"
+    },
+    "undefined-18": {
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "description": "success"
+    },
+    "userSchedulerForm": {
+      "$ref": "#/definitions/UserSchedulerForm",
+      "description": "定时任务"
+    },
+    "undefined-19": {
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "description": "success"
+    },
+    "undefined-20": {
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "description": "success"
+    },
+    "aggData": {
+      "$ref": "#/definitions/AggData",
+      "description": "success"
+    },
+    "statusData": {
+      "$ref": "#/definitions/StatusData",
+      "description": "成功获取服务状态信息"
+    },
+    "errorsData": {
+      "$ref": "#/definitions/ErrorsData",
+      "description": "成功获取错误状态码信息"
+    }
+  },
+  "required": [
+    "schemaVersion"
+  ],
+  "definitions": {
+    "CreateUserForm": {
+      "properties": {
+        "phone_id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh-cn"
+          ]
+        },
+        "authData": {
+          "type": "object",
+          "properties": {
+            "src": {
+              "type": "string",
+              "enum": [
+                "qq",
+                "sina",
+                "baidu",
+                "wechat",
+                "twitter",
+                "facebook",
+                "google",
+                "amazon"
+              ]
+            },
+            "uid": {
+              "type": "string"
+            },
+            "token": {
+              "type": "string",
+              "description": "用户 token"
+            },
+            "token_secret": {
+              "type": "string",
+              "description": "针对 twitter 平台，需要传用户 token_secret"
+            }
+          }
+        }
+      }
+    },
+    "LoginForm": {
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh-cn"
+          ]
+        }
+      }
+    },
+    "UserTokenModel": {
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "expire_at": {
+          "type": "integer"
+        }
+      }
+    },
+    "UpdateUserForm": {
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "old_pwd": {
+          "type": "string"
+        },
+        "new_pwd": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "gender": {
+          "type": "string",
+          "enum": [
+            "M",
+            "F",
+            "N"
+          ]
+        },
+        "birthday": {
+          "type": "string",
+          "description": "YYYY-MM-DD or MM-DD"
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "lang": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh-cn"
+          ]
+        },
+        "remark": {
+          "type": "string"
+        }
+      }
+    },
+    "UserModel": {
+      "allOf": [
+        {
+          "properties": {
+            "uid": {
+              "type": "string"
+            },
+            "is_anonymous": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/UpdateUserForm"
+        }
+      ]
+    },
+    "DeviceItem": {
+      "properties": {
+        "product_key": {
+          "type": "string"
+        },
+        "product_name": {
+          "type": "string",
+          "description": "产品名称"
+        },
+        "did": {
+          "type": "string"
+        },
+        "mac": {
+          "type": "string"
+        },
+        "is_online": {
+          "type": "boolean",
+          "description": "在线状态；针对 NB-IOT 产品，返回设备一直在线；"
+        },
+        "passcode": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "description": "M2M 的 mqtt 端口号"
+        },
+        "port_s": {
+          "type": "integer",
+          "description": "M2M 的 mqtt SSL 端口号"
+        },
+        "ws_port": {
+          "type": "integer",
+          "description": "websocket 端口号"
+        },
+        "wss_port": {
+          "type": "integer",
+          "description": "websocket SSL 端口号"
+        },
+        "remark": {
+          "type": "string",
+          "description": "设备备注"
+        },
+        "is_disabled": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string",
+          "description": "- 设备类型，\"normal\": 单品设备，\"center_control\": 中控设备，\"sub_dev\": 中控子设备\n"
+        },
+        "dev_alias": {
+          "type": "string",
+          "description": "设备别名"
+        },
+        "dev_label": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "设备标签列表，目前用于语音 API 批量设备控制"
+        },
+        "protoc": {
+          "type": "integer",
+          "description": "- 所属产品的网络类型，1: 蓝牙(BT)，2: 蓝牙(BLE)，3: wifi，4: 移动网络(CELLULAR)，5: NB-IOT\n"
+        },
+        "proto_ver": {
+          "type": "string",
+          "enum": [
+            "01",
+            "01_01",
+            "03",
+            "04"
+          ]
+        },
+        "lan_prot_ver": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "special",
+            "owner",
+            "guest",
+            "normal"
+          ],
+          "description": "绑定角色"
+        },
+        "mesh_id": {
+          "type": "string",
+          "description": "蓝牙设备在 Mesh 网络中的 ID"
+        },
+        "gw_did": {
+          "type": "string",
+          "description": "(蓝牙)设备所使用数据通道设备 DID"
+        }
+      }
+    },
+    "DeviceList": {
+      "properties": {
+        "devices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceItem"
+          }
+        }
+      }
+    },
+    "DeviceSchedulerForm": {
+      "properties": {
+        "raw": {
+          "type": "string",
+          "description": "- 原始指令: raw\n<pre>\n发送 0090 命令，只需要包括 payload 即可，如要发送 payload 为 010203，就是\n{\n  \"raw\": \"010203\"\n}\n</pre>\n"
+        },
+        "attrs": {
+          "type": "object"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "time": {
+          "type": "string",
+          "format": "time",
+          "description": "定时任务执行的时间，精确到分钟，格式xx:xx，如：02:30"
+        },
+        "repeat": {
+          "type": "string",
+          "description": "- 不重复设置为 none\n- 重复设置为 \"mon\", \"tue\", \"wed\", \"thu\", \"fri\", \"sat\", \"sun\" 的组合，组合之间用逗号分隔，如每周一和周二重复为 \"mon,tue\"\n- 按日重复设置为 day\n"
+        },
+        "days": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "maxLength": 31,
+          "description": "重复的日期列表，如[1, 15]表示每月1日和15日重复"
+        },
+        "start_date": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 10,
+          "format": "date",
+          "description": "定时任务执行的开始日期，该天0点开始，格式xxxx-xx-xx，如2016-09-01"
+        },
+        "end_date": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 10,
+          "format": "date",
+          "description": "定时任务执行的结束日期，该天24点结束，格式xxxx-xx-xx，如2016-10-01"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否启用，若不启用则时间到也不触发，默认启用"
+        },
+        "remark": {
+          "type": "string",
+          "maxLength": 1024
+        }
+      },
+      "required": [
+        "time",
+        "repeat"
+      ]
+    },
+    "DeviceSchedulerModel": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/DeviceSchedulerForm"
+        },
+        {
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "string",
+              "description": "返回的创建时间是 UTC 时间"
+            }
+          }
+        }
+      ]
+    },
+    "DeviceSchedulerList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/DeviceSchedulerModel"
+      }
+    },
+    "ModifyBindingForm": {
+      "properties": {
+        "remark": {
+          "type": "string",
+          "description": "备注信息"
+        },
+        "dev_alias": {
+          "type": "string",
+          "description": "设备别名"
+        },
+        "dev_label": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AggQuery": {
+      "type": "object",
+      "properties": {
+        "start_ts": {
+          "type": "integer"
+        },
+        "end_ts": {
+          "type": "integer"
+        },
+        "attrs": {
+          "type": "string"
+        },
+        "aggregator": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "did": {
+          "type": "string"
+        }
+      }
+    },
+    "AggData": {
+      "properties": {
+        "query": {
+          "$ref": "#/definitions/AggQuery"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string"
+              },
+              "attrs": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "DeviceRTData": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "type": "object",
+          "properties": {
+            "start_time": {
+              "type": "integer"
+            },
+            "end_time": {
+              "type": "integer"
+            },
+            "type": {
+              "type": "string"
+            },
+            "did": {
+              "type": "string"
+            },
+            "skip": {
+              "type": "integer"
+            },
+            "limit": {
+              "type": "integer"
+            },
+            "sort": {
+              "type": "string"
+            },
+            "total": {
+              "type": "integer"
+            }
+          }
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "ip": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "integer"
+              },
+              "payload_bin": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "StatusData": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "ErrorModel": {
+      "properties": {
+        "status": {
+          "type": "integer"
+        },
+        "error_code": {
+          "type": "string"
+        },
+        "error_message": {
+          "type": "string"
+        }
+      }
+    },
+    "ErrorsData": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/ErrorModel"
+      }
+    },
+    "MessageMeta": {
+      "properties": {
+        "total": {
+          "type": "integer"
+        },
+        "limit": {
+          "type": "integer"
+        },
+        "skip": {
+          "type": "integer"
+        },
+        "previous": {
+          "type": "string"
+        },
+        "next": {
+          "type": "string"
+        }
+      }
+    },
+    "MessageItem": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "消息id"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer",
+          "enum": [
+            0,
+            1,
+            2
+          ],
+          "description": "0 未读，1 已读，2 删除"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "MessageList": {
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/MessageMeta"
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MessageItem"
+          }
+        }
+      }
+    },
+    "RulesEventAttr": {
+      "properties": {
+        "attr_name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1"
+          ]
+        }
+      }
+    },
+    "RulesInput": {
+      "properties": {
+        "product_key": {
+          "type": "string"
+        },
+        "did": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        }
+      }
+    },
+    "RulesCondition": {
+      "properties": {
+        "left": {
+          "type": "string"
+        },
+        "opt": {
+          "type": "string",
+          "enum": [
+            ">",
+            ">=",
+            "<=",
+            "<",
+            "!=",
+            "=="
+          ]
+        },
+        "right": {
+          "type": "string"
+        }
+      }
+    },
+    "RulesOutputAttrs": {
+      "properties": {
+        "<key>": {
+          "type": "string",
+          "default": "<value>"
+        }
+      }
+    },
+    "RulesOutput": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "devctrl",
+            "delay"
+          ],
+          "description": "devctrl 控制设备; delay 延迟若干秒"
+        },
+        "delay": {
+          "type": "integer"
+        },
+        "did": {
+          "type": "string"
+        },
+        "attrs": {
+          "$ref": "#/definitions/RulesOutputAttrs"
+        },
+        "raw": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "Rules": {
+      "properties": {
+        "product_key": {
+          "type": "string"
+        },
+        "did": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "remark": {
+          "type": "string"
+        },
+        "event": {
+          "type": "string"
+        },
+        "event_attr": {
+          "$ref": "#/definitions/RulesEventAttr"
+        },
+        "input": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RulesInput"
+          }
+        },
+        "condition": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/RulesCondition"
+            }
+          }
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/RulesOutput"
+            }
+          }
+        }
+      }
+    },
+    "RulesUpdate": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "product_key": {
+          "type": "string"
+        },
+        "did": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "remark": {
+          "type": "string"
+        },
+        "event": {
+          "type": "string"
+        },
+        "event_attr": {
+          "$ref": "#/definitions/RulesEventAttr"
+        },
+        "input": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RulesInput"
+          }
+        },
+        "condition": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/RulesCondition"
+            }
+          }
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/RulesOutput"
+            }
+          }
+        }
+      }
+    },
+    "RulesList": {
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RulesUpdate"
+          }
+        }
+      }
+    },
+    "SharingDeviceMeta": {
+      "properties": {
+        "total": {
+          "type": "integer"
+        },
+        "limit": {
+          "type": "integer"
+        },
+        "skip": {
+          "type": "integer"
+        },
+        "previous": {
+          "type": "string"
+        },
+        "next": {
+          "type": "string"
+        }
+      }
+    },
+    "SharingDeviceModel": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "分享记录id"
+        },
+        "type": {
+          "type": "integer",
+          "description": "分享类型，0：普通分享，1：二维码分享"
+        },
+        "uid": {
+          "type": "string",
+          "description": "账号uid，对应主账号或子账号"
+        },
+        "username": {
+          "type": "string",
+          "description": "账号username,中间4个字母*替代"
+        },
+        "user_alias": {
+          "type": "string",
+          "description": "昵称备注"
+        },
+        "email": {
+          "type": "string",
+          "description": "账号email,@前面4个字符*替代"
+        },
+        "phone": {
+          "type": "string",
+          "description": "账号phone,中间4个数字*替代"
+        },
+        "did": {
+          "type": "string",
+          "description": "设备did"
+        },
+        "product_name": {
+          "type": "string",
+          "description": "产品名称"
+        },
+        "dev_alias": {
+          "type": "string",
+          "description": "设备别名"
+        },
+        "status": {
+          "type": "integer",
+          "description": "当前分享状态"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "创建分享时间"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "分享状态更新时间"
+        },
+        "expired_at": {
+          "type": "string",
+          "description": "分享超时时间"
+        }
+      }
+    },
+    "SharingDeviceList": {
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/SharingDeviceMeta"
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SharingDeviceModel"
+          }
+        }
+      }
+    },
+    "SharingCodeModel": {
+      "properties": {
+        "owner": {
+          "type": "string",
+          "description": "owner用户信息，手机号|邮箱|用户名|uid"
+        },
+        "product_name": {
+          "type": "string",
+          "description": "产品名称"
+        },
+        "dev_alias": {
+          "type": "string",
+          "description": "设备别名"
+        },
+        "expired_at": {
+          "type": "string",
+          "description": "分享超时时间"
+        }
+      }
+    },
+    "BindingUserItem": {
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "description": "绑定时间"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string",
+          "description": "账号username,中间4个字母*替代"
+        },
+        "email": {
+          "type": "string",
+          "description": "账号email,@前面4个字符*替代"
+        },
+        "phone": {
+          "type": "string",
+          "description": "账号phone,中间4个数字*替代"
+        }
+      }
+    },
+    "BindingUserList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/BindingUserItem"
+      }
+    },
+    "AttrItem": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Data point identifier\n"
+        },
+        "name": {
+          "type": "string",
+          "description": "Data point name\n"
+        },
+        "display_name": {
+          "type": "string",
+          "description": "Data point display name\n"
+        },
+        "desc": {
+          "type": "string",
+          "description": "hard code, .....\n"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "status_writable",
+            "status_readonly",
+            "alert",
+            "fault"
+          ],
+          "description": "- status_writable: writable\n- status_readonly: readonly\n- alert: alert\n- fault: fault\n"
+        },
+        "data_type": {
+          "type": "string",
+          "enum": [
+            "bool",
+            "uint8",
+            "uint16",
+            "uint32",
+            "enum",
+            "binary"
+          ]
+        },
+        "uint_spec": {
+          "type": "object",
+          "description": "When data_type is uint8/uint16/uint32, there is this field\n",
+          "properties": {
+            "min": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            },
+            "ratio": {
+              "type": "number"
+            },
+            "addition": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "enum": {
+          "type": "array",
+          "description": "When data_type is enum, there is this field\n",
+          "items": {
+            "type": "string"
+          }
+        },
+        "position": {
+          "type": "object",
+          "properties": {
+            "bit_offset": {
+              "type": "integer"
+            },
+            "len": {
+              "type": "integer"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "bit",
+                "byte"
+              ]
+            },
+            "byte_offset": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "EntityItem": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "hard code, 0\n"
+        },
+        "name": {
+          "type": "string",
+          "description": "hard code, entity0\n"
+        },
+        "display_name": {
+          "type": "string",
+          "description": "hard code, Gizwits Development Kit\n"
+        },
+        "attrs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttrItem"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ElementItem": {
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Data point display name\n"
+        },
+        "key": {
+          "type": "string",
+          "description": "entity0.{data point identifier}\n"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "QBooleanElement",
+            "QFloatElement",
+            "QRadioElement",
+            "QMultilineElement",
+            "QLabelElement"
+          ]
+        },
+        "keyboardType": {
+          "type": "string",
+          "enum": [
+            "NumbersAndPunctuation",
+            "PhonePad"
+          ]
+        },
+        "maxLength": {
+          "type": "integer",
+          "description": "QMultilineElement only has this field\n"
+        },
+        "items": {
+          "type": "array",
+          "description": "QRadioElement only has this field\n",
+          "items": {
+            "type": "string"
+          }
+        },
+        "boolValue": {
+          "type": "boolean",
+          "description": "type 为 QBooleanElement only has this field\n"
+        },
+        "bind": {
+          "type": "string",
+          "description": "type 为 QFloatElement when floatValue:float\n"
+        },
+        "maximumValue": {
+          "type": "number",
+          "description": "type 为 QFloatElement only has this field\n"
+        },
+        "minimumValue": {
+          "type": "number",
+          "description": "type 为 QFloatElement only has this field\n"
+        },
+        "value": {
+          "type": "integer",
+          "description": "type 为 QFloatElement only has this field，为 0\n"
+        },
+        "object": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "hard code, entity0\n"
+            },
+            "bind": {
+              "type": "array",
+              "description": "hard code, entity0.{data point name}\n",
+              "items": {
+                "type": "string"
+              }
+            },
+            "perm": {
+              "type": "string",
+              "enum": [
+                "W",
+                "R",
+                "N",
+                "E"
+              ],
+              "description": "- W: writable\n- R: readonly\n- N: alert\n- E: fault\n"
+            },
+            "unit_spec": {
+              "type": "object",
+              "description": "QFloatElement only has this field\n",
+              "properties": {
+                "max": {
+                  "type": "integer"
+                },
+                "step": {
+                  "type": "integer"
+                },
+                "min": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "SectionItem": {
+      "properties": {
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ElementItem"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DataPoint": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Product name"
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EntityItem"
+          }
+        },
+        "protocolType": {
+          "type": "string",
+          "description": "hard code, standard\n"
+        },
+        "product_key": {
+          "type": "string"
+        },
+        "packetVersion": {
+          "type": "string",
+          "description": "hard code, 0x00000004\n"
+        },
+        "ui": {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "object",
+              "properties": {
+                "version": {
+                  "type": "integer",
+                  "description": "hard code, 4\n"
+                },
+                "showEditButton": {
+                  "type": "boolean",
+                  "description": "hard code, false\n"
+                }
+              }
+            },
+            "sections": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SectionItem"
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GroupModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "设备分组 id"
+        },
+        "group_name": {
+          "type": "string",
+          "description": "设备分组名称"
+        },
+        "product_key": {
+          "type": "string",
+          "description": "产品 product_key"
+        },
+        "verbose_name": {
+          "type": "string",
+          "description": "产品名称"
+        },
+        "gw_did": {
+          "type": "string",
+          "description": "网关设备ID"
+        },
+        "multicast_id": {
+          "type": "string",
+          "description": "蓝牙组播ID，整型数字字符串，其范围为0~65534"
+        },
+        "remark": {
+          "type": "string",
+          "description": "分组备注信息"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "设备分组创建时间（UTC 时间）"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "设备分组更新时间（UTC 时间）"
+        }
+      }
+    },
+    "GroupList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/GroupModel"
+      }
+    },
+    "GroupDeviceModel": {
+      "type": "object",
+      "properties": {
+        "did": {
+          "type": "string",
+          "description": "设备 did"
+        },
+        "type": {
+          "type": "string",
+          "description": "设备类型：普通设备(noramal)，中控设备(center_control)，中控子设备(sub_dev)"
+        },
+        "dev_alias": {
+          "type": "string",
+          "description": "设备别名"
+        },
+        "product_key": {
+          "type": "string",
+          "description": "产品 product_key"
+        },
+        "verbose_name": {
+          "type": "string",
+          "description": "产品名称"
+        }
+      }
+    },
+    "GroupDevicesList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/GroupDeviceModel"
+      }
+    },
+    "GroupControlResultModel": {
+      "type": "object",
+      "properties": {
+        "did": {
+          "type": "string",
+          "description": "设备 did"
+        },
+        "result": {
+          "type": "boolean",
+          "description": "是否控制成功"
+        }
+      }
+    },
+    "GroupControlResultList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/GroupControlResultModel"
+      }
+    },
+    "SceneTask": {
+      "properties": {
+        "task_type": {
+          "type": "string",
+          "enum": [
+            "delay",
+            "device",
+            "group"
+          ],
+          "description": "- 场景任务类型：\n- \"delay\": 延时任务，\n- \"device\": 控制当个设备任务，\n- \"group\": 控制设备分组任务\n"
+        },
+        "time": {
+          "type": "integer",
+          "description": "可选，针对延时任务，延时时间，以秒为单位，最大值： 3600 秒"
+        },
+        "did": {
+          "type": "string",
+          "description": "可选，针对单品控制任务，设备 did"
+        },
+        "group_id": {
+          "type": "string",
+          "description": "可选，针对设备分组控制任务，设备分组 id"
+        },
+        "attrs": {
+          "type": "object",
+          "description": "可选，针对非延时任务，数据点控制命令，枚举型数据点传序号，扩展型数据点传 base64 编码字符串"
+        },
+        "raw": {
+          "type": "string",
+          "description": "可选，针对非延时任务，原生控制指令，base64 编码"
+        },
+        "remark": {
+          "type": "string",
+          "description": "可选，任务备注，后台会自动对内容进行escape转义"
+        }
+      },
+      "required": [
+        "task_type"
+      ]
+    },
+    "SceneTaskModel": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/SceneTask"
+        },
+        {
+          "properties": {
+            "product_key": {
+              "type": "string",
+              "description": "针对非延时任务，产品 product_key"
+            },
+            "verbose_name": {
+              "type": "string",
+              "description": "针对非延时任务，产品名称"
+            },
+            "group_name": {
+              "type": "string",
+              "description": "针对设备分组控制任务，设备分组名称"
+            },
+            "dev_alias": {
+              "type": "string",
+              "description": "针对设备控制任务，设备别名"
+            },
+            "dev_remark": {
+              "type": "string",
+              "description": "针对设备控制任务，设备备注"
+            },
+            "remark": {
+              "type": "string",
+              "description": "任务备注，内容已进行escape转义"
+            }
+          }
+        }
+      ]
+    },
+    "SceneModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "场景 id"
+        },
+        "scene_name": {
+          "type": "string",
+          "description": "场景名称"
+        },
+        "remark": {
+          "type": "string",
+          "description": "场景备注"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SceneTaskModel"
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "description": "场景创建时间（UTC 时间）"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "场景更新时间（UTC 时间）"
+        }
+      }
+    },
+    "SceneList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SceneModel"
+      }
+    },
+    "UserSchedulerForm": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/DeviceSchedulerForm"
+        },
+        {
+          "properties": {
+            "did": {
+              "type": "string",
+              "description": "设备 did"
+            },
+            "group_id": {
+              "type": "string",
+              "description": "设备分组 id"
+            },
+            "scene_id": {
+              "type": "string",
+              "description": "用户场景 id"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
