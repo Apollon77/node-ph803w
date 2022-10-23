@@ -1,0 +1,283 @@
+{
+  "name": "iMoniter",
+  "packetVersion": "0x00000004",
+  "protocolType": "standard",
+  "product_key": "2d3d954d9bb741b4a19ba1153104932b",
+  "entities": [
+    {
+      "display_name": "机智云开发套件",
+      "attrs": [
+        {
+          "display_name": "pH_OUT",
+          "name": "pH_OUT",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "type": "status_readonly",
+          "id": 0,
+          "desc": ""
+        },
+        {
+          "display_name": "mV_OUT",
+          "name": "mV_OUT",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 1
+          },
+          "type": "status_readonly",
+          "id": 1,
+          "desc": ""
+        },
+        {
+          "display_name": "EC_OUT",
+          "name": "EC_OUT",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 2
+          },
+          "type": "status_readonly",
+          "id": 2,
+          "desc": ""
+        },
+        {
+          "display_name": "TEMP_OUT",
+          "name": "TEMP_OUT",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 3
+          },
+          "type": "status_readonly",
+          "id": 3,
+          "desc": ""
+        },
+        {
+          "display_name": "pH",
+          "name": "pH",
+          "data_type": "uint16",
+          "position": {
+            "byte_offset": 1,
+            "unit": "byte",
+            "len": 2,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 1400,
+            "ratio": 0.01,
+            "min": 0
+          },
+          "type": "status_readonly",
+          "id": 4,
+          "desc": ""
+        },
+        {
+          "display_name": "mV",
+          "name": "mV",
+          "data_type": "uint16",
+          "position": {
+            "byte_offset": 3,
+            "unit": "byte",
+            "len": 2,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": -2000,
+            "max": 4000,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_readonly",
+          "id": 5,
+          "desc": "mV值"
+        },
+        {
+          "display_name": "EC",
+          "name": "EC",
+          "data_type": "uint16",
+          "position": {
+            "byte_offset": 5,
+            "unit": "byte",
+            "len": 2,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 2000,
+            "ratio": 0.01,
+            "min": 0
+          },
+          "type": "status_readonly",
+          "id": 6,
+          "desc": "电导"
+        },
+        {
+          "display_name": "TEMP",
+          "name": "TEMP",
+          "data_type": "uint16",
+          "position": {
+            "byte_offset": 7,
+            "unit": "byte",
+            "len": 2,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 1000,
+            "ratio": 0.1,
+            "min": 0
+          },
+          "type": "status_readonly",
+          "id": 7,
+          "desc": "温度"
+        }
+      ],
+      "name": "entity0",
+      "id": 0
+    }
+  ],
+  "ui": {
+    "object": {
+      "version": 4,
+      "showEditButton": false
+    },
+    "sections": [
+      {
+        "elements": [
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.pH_OUT"
+              ],
+              "perm": "N"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.pH_OUT",
+            "title": "pH_OUT"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.mV_OUT"
+              ],
+              "perm": "N"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.mV_OUT",
+            "title": "mV_OUT"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.EC_OUT"
+              ],
+              "perm": "N"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.EC_OUT",
+            "title": "EC_OUT"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.TEMP_OUT"
+              ],
+              "perm": "N"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.TEMP_OUT",
+            "title": "TEMP_OUT"
+          },
+          {
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.pH"
+              ],
+              "uint_spec": {
+                "max": 14,
+                "step": 0.01,
+                "min": 0
+              },
+              "perm": "N"
+            },
+            "type": "QLabelElement",
+            "key": "entity0.pH",
+            "title": "pH"
+          },
+          {
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.mV"
+              ],
+              "uint_spec": {
+                "max": 2000,
+                "step": 1,
+                "min": -2000
+              },
+              "perm": "N"
+            },
+            "type": "QLabelElement",
+            "key": "entity0.mV",
+            "title": "mV"
+          },
+          {
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.EC"
+              ],
+              "uint_spec": {
+                "max": 20,
+                "step": 0.01,
+                "min": 0
+              },
+              "perm": "N"
+            },
+            "type": "QLabelElement",
+            "key": "entity0.EC",
+            "title": "EC"
+          },
+          {
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.TEMP"
+              ],
+              "uint_spec": {
+                "max": 100,
+                "step": 0.1,
+                "min": 0
+              },
+              "perm": "N"
+            },
+            "type": "QLabelElement",
+            "key": "entity0.TEMP",
+            "title": "TEMP"
+          }
+        ]
+      }
+    ]
+  }
+}

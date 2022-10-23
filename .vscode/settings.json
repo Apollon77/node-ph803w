@@ -1,0 +1,10 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "/api/*/*.jsonc"
+      ],
+      "url": "./api/en/openapi_apps.json#/definitions/DataPoint"
+    },
+  ],
+}

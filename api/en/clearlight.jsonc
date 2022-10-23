@@ -1,0 +1,659 @@
+{
+  "name": "Clearlight",
+  "packetVersion": "0x00000004",
+  "protocolType": "standard",
+  "product_key": "4bde5ccdff4a48c0840e055204a71e1f",
+  "entities": [
+    {
+      "display_name": "Gizwits Development Kit",
+      "attrs": [
+        {
+          "display_name": "Set extern_light",
+          "name": "EXTERNAL_LIGHT",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "type": "status_writable",
+          "id": 0,
+          "desc": ""
+        },
+        {
+          "display_name": "Set intern_light",
+          "name": "INTERNAL_LIGHT",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 1
+          },
+          "type": "status_writable",
+          "id": 1,
+          "desc": ""
+        },
+        {
+          "display_name": "PRE_TIME_FLAG",
+          "name": "PRE_TIME_FLAG",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 2
+          },
+          "type": "status_writable",
+          "id": 2,
+          "desc": ""
+        },
+        {
+          "display_name": "power_flag",
+          "name": "power_flag",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 3
+          },
+          "type": "status_writable",
+          "id": 3,
+          "desc": ""
+        },
+        {
+          "display_name": "cf_flag",
+          "name": "cf_flag",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 4
+          },
+          "type": "status_writable",
+          "id": 4,
+          "desc": ""
+        },
+        {
+          "display_name": "UVB_FLAG",
+          "name": "UVB_FLAG",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 5
+          },
+          "type": "status_writable",
+          "id": 5,
+          "desc": ""
+        },
+        {
+          "display_name": "N_FLAG",
+          "name": "N_FLAG",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 6
+          },
+          "type": "status_writable",
+          "id": 6,
+          "desc": ""
+        },
+        {
+          "display_name": "Set LED color",
+          "name": "LED",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 1,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 7,
+          "desc": ""
+        },
+        {
+          "display_name": "Set RIGHT",
+          "name": "RIGHT",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 2,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 8,
+          "desc": ""
+        },
+        {
+          "display_name": "Set LEFT",
+          "name": "LEFT",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 3,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 9,
+          "desc": ""
+        },
+        {
+          "display_name": "Set temperature",
+          "name": "SET_TEMP",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 4,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 10,
+          "desc": ""
+        },
+        {
+          "display_name": "Set working hours",
+          "name": "SET_HOUR",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 5,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 11,
+          "desc": ""
+        },
+        {
+          "display_name": "SET_MINUTE",
+          "name": "SET_MINUTE",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 6,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 12,
+          "desc": ""
+        },
+        {
+          "display_name": "PRE_TIME_HOUR",
+          "name": "PRE_TIME_HOUR",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 7,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 13,
+          "desc": ""
+        },
+        {
+          "display_name": "PRE_TIME_MINUTE",
+          "name": "PRE_TIME_MINUTE",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 8,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 14,
+          "desc": ""
+        },
+        {
+          "display_name": "SN",
+          "name": "SN",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 9,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 15,
+          "desc": ""
+        },
+        {
+          "display_name": "Ambient Temperature",
+          "name": "CURRENT_TEMP",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 10,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_readonly",
+          "id": 16,
+          "desc": ""
+        },
+        {
+          "display_name": "heart_pulse",
+          "name": "heart_pulse",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 11,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 255,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_readonly",
+          "id": 17,
+          "desc": ""
+        }
+      ],
+      "name": "entity0",
+      "id": 0
+    }
+  ],
+  "ui": {
+    "object": {
+      "version": 4,
+      "showEditButton": false
+    },
+    "sections": [
+      {
+        "elements": [
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.EXTERNAL_LIGHT"
+              ],
+              "perm": "W"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.EXTERNAL_LIGHT",
+            "title": "Set extern_light"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.INTERNAL_LIGHT"
+              ],
+              "perm": "W"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.INTERNAL_LIGHT",
+            "title": "Set intern_light"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.PRE_TIME_FLAG"
+              ],
+              "perm": "W"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.PRE_TIME_FLAG",
+            "title": "PRE_TIME_FLAG"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.power_flag"
+              ],
+              "perm": "W"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.power_flag",
+            "title": "power_flag"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.cf_flag"
+              ],
+              "perm": "W"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.cf_flag",
+            "title": "cf_flag"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.UVB_FLAG"
+              ],
+              "perm": "W"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.UVB_FLAG",
+            "title": "UVB_FLAG"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.N_FLAG"
+              ],
+              "perm": "W"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.N_FLAG",
+            "title": "N_FLAG"
+          },
+          {
+            "title": "Set LED color",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.LED"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.LED",
+            "maximumValue": 255,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "Set RIGHT",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.RIGHT"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.RIGHT",
+            "maximumValue": 255,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "Set LEFT",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.LEFT"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.LEFT",
+            "maximumValue": 255,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "Set temperature",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.SET_TEMP"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.SET_TEMP",
+            "maximumValue": 255,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "Set working hours",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.SET_HOUR"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.SET_HOUR",
+            "maximumValue": 255,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "SET_MINUTE",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.SET_MINUTE"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.SET_MINUTE",
+            "maximumValue": 255,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "PRE_TIME_HOUR",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.PRE_TIME_HOUR"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.PRE_TIME_HOUR",
+            "maximumValue": 255,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "PRE_TIME_MINUTE",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.PRE_TIME_MINUTE"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.PRE_TIME_MINUTE",
+            "maximumValue": 255,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "SN",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.SN"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.SN",
+            "maximumValue": 255,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.CURRENT_TEMP"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "N"
+            },
+            "type": "QLabelElement",
+            "key": "entity0.CURRENT_TEMP",
+            "title": "Ambient temperature"
+          },
+          {
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.heart_pulse"
+              ],
+              "uint_spec": {
+                "max": 255,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "N"
+            },
+            "type": "QLabelElement",
+            "key": "entity0.heart_pulse",
+            "title": "heart_pulse"
+          }
+        ]
+      }
+    ]
+  }
+}

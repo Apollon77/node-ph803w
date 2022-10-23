@@ -4,6 +4,9 @@
  * Usage: node discovery.js
  *
  * To see debug output call like: DEBUG=ph803w* node discovery.js
+ *
+ * If you have a firewall, you may need to allow responses with:
+ *   sudo ufw allow proto udp from 0.0.0.0/0 port 12414
  */
 
 const { PH803WDiscovery } = require('../index');

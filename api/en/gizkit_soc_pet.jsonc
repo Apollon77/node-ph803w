@@ -1,0 +1,441 @@
+{
+  "name": "My WeChat Pet House SOC",
+  "packetVersion": "0x00000004",
+  "protocolType": "standard",
+  "product_key": "de9e8d18d9394cce9081b25a531e552b",
+  "entities": [
+    {
+      "display_name": "Gizwits Development Kit",
+      "attrs": [
+        {
+          "display_name": "Turn on/off the red light",
+          "name": "LED_OnOff",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "type": "status_writable",
+          "id": 0,
+          "desc": ""
+        },
+        {
+          "display_name": "Set LED combination color",
+          "name": "LED_Color",
+          "data_type": "enum",
+          "enum": [
+            "Customize",
+            "Yellow",
+            "Purple",
+            "Pink"
+          ],
+          "position": {
+            "byte_offset": 0,
+            "unit": "bit",
+            "len": 2,
+            "bit_offset": 1
+          },
+          "type": "status_writable",
+          "id": 1,
+          "desc": ""
+        },
+        {
+          "display_name": "Set LED red value",
+          "name": "LED_R",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 1,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 254,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 2,
+          "desc": ""
+        },
+        {
+          "display_name": "Set LED green value",
+          "name": "LED_G",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 2,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 254,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 3,
+          "desc": ""
+        },
+        {
+          "display_name": "Set LED blue value",
+          "name": "LED_B",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 3,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 254,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 4,
+          "desc": ""
+        },
+        {
+          "display_name": "Set motor speed",
+          "name": "Motor_Speed",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 4,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": -5,
+            "max": 10,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_writable",
+          "id": 5,
+          "desc": ""
+        },
+        {
+          "display_name": "Infrared detection",
+          "name": "Infrared",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 5,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "type": "status_readonly",
+          "id": 6,
+          "desc": ""
+        },
+        {
+          "display_name": "Ambient temperature",
+          "name": "Temperature",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 6,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": -13,
+            "max": 200,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_readonly",
+          "id": 7,
+          "desc": ""
+        },
+        {
+          "display_name": "environment humidity",
+          "name": "Humidity",
+          "data_type": "uint8",
+          "position": {
+            "byte_offset": 7,
+            "unit": "byte",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "uint_spec": {
+            "addition": 0,
+            "max": 100,
+            "ratio": 1,
+            "min": 0
+          },
+          "type": "status_readonly",
+          "id": 8,
+          "desc": ""
+        },
+        {
+          "display_name": "Alarm 1",
+          "name": "Alert_1",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 8,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "type": "alert",
+          "id": 9,
+          "desc": ""
+        },
+        {
+          "display_name": "Alarm 2",
+          "name": "Alert_2",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 8,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 1
+          },
+          "type": "alert",
+          "id": 10,
+          "desc": ""
+        },
+        {
+          "display_name": "LED fault",
+          "name": "Fault_LED",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 9,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 0
+          },
+          "type": "fault",
+          "id": 11,
+          "desc": ""
+        },
+        {
+          "display_name": "motor failure",
+          "name": "Fault_Motor",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 9,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 1
+          },
+          "type": "fault",
+          "id": 12,
+          "desc": ""
+        },
+        {
+          "display_name": "Temperature and humidity sensor failure",
+          "name": "Fault_TemHum",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 9,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 2
+          },
+          "type": "fault",
+          "id": 13,
+          "desc": ""
+        },
+        {
+          "display_name": "Infrared sensor failure",
+          "name": "Fault_IR",
+          "data_type": "bool",
+          "position": {
+            "byte_offset": 9,
+            "unit": "bit",
+            "len": 1,
+            "bit_offset": 3
+          },
+          "type": "fault",
+          "id": 14,
+          "desc": ""
+        }
+      ],
+      "name": "entity0",
+      "id": 0
+    }
+  ],
+  "ui": {
+    "object": {
+      "version": 4,
+      "showEditButton": false
+    },
+    "sections": [
+      {
+        "elements": [
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.LED_OnOff"
+              ],
+              "perm": "W"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.LED_OnOff",
+            "title": "Turn on/off the red light"
+          },
+          {
+            "items": [
+              "Customize",
+              "Yellow",
+              "Purple",
+              "Pink"
+            ],
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.LED_Color"
+              ],
+              "perm": "W"
+            },
+            "type": "QRadioElement",
+            "key": "entity0.LED_Color",
+            "title": "Set LED combination color"
+          },
+          {
+            "title": "Set LED red value",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.LED_R"
+              ],
+              "uint_spec": {
+                "max": 254,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.LED_R",
+            "maximumValue": 254,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "Set LED green value",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.LED_G"
+              ],
+              "uint_spec": {
+                "max": 254,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.LED_G",
+            "maximumValue": 254,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "Set LED blue value",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.LED_B"
+              ],
+              "uint_spec": {
+                "max": 254,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.LED_B",
+            "maximumValue": 254,
+            "minimumValue": 0,
+            "type": "QFloatElement"
+          },
+          {
+            "title": "Set the motor speed",
+            "bind": "floatValue:float",
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.Motor_Speed"
+              ],
+              "uint_spec": {
+                "max": 5,
+                "step": 1,
+                "min": -5
+              },
+              "perm": "W"
+            },
+            "value": 0,
+            "key": "entity0.Motor_Speed",
+            "maximumValue": 5,
+            "minimumValue": -5,
+            "type": "QFloatElement"
+          },
+          {
+            "boolValue": false,
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.Infrared"
+              ],
+              "perm": "N"
+            },
+            "type": "QBooleanElement",
+            "key": "entity0.Infrared",
+            "title": "Infrared Detection"
+          },
+          {
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.Temperature"
+              ],
+              "uint_spec": {
+                "max": 187,
+                "step": 1,
+                "min": -13
+              },
+              "perm": "N"
+            },
+            "type": "QLabelElement",
+            "key": "entity0.Temperature",
+            "title": "Ambient Temperature"
+          },
+          {
+            "object": {
+              "action": "entity0",
+              "bind": [
+                "entity0.Humidity"
+              ],
+              "uint_spec": {
+                "max": 100,
+                "step": 1,
+                "min": 0
+              },
+              "perm": "N"
+            },
+            "type": "QLabelElement",
+            "key": "entity0.Humidity",
+            "title": "Ambient Humidity"
+          }
+        ]
+      }
+    ]
+  }
+}
