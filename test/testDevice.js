@@ -1,6 +1,7 @@
 /*jshint expr: true*/
 const chai = require('chai');
 const expect = chai.expect;
+const { setTimeout: setTimeoutPromise } = require('node:timers/promises');
 const TestServer = require('./lib/testServer');
 const PH803WDevice = require('../lib/device');
 
@@ -149,6 +150,120 @@ describe('PH803-W Device Test', function() {
             }, 30000);
         });
     }).timeout(35000);
+
+    it('connect and bad header', async () => {
+        const device = new PH803WDevice('127.0.0.1');
+        await device.connect();
+
+        let timeout;
+        await Promise.any([
+            setTimeoutPromise(500).then(() => {
+                timeout = true;
+            }),
+            device.login('BADHEADER'),
+        ]);
+
+        expect(timeout).to.be.true;
+
+        await device.close(false);
+    });
+
+    it('connect and short header', async () => {
+        const device = new PH803WDevice('127.0.0.1');
+        await device.connect();
+
+        let timeout;
+        await Promise.any([
+            setTimeoutPromise(500).then(() => {
+                timeout = true;
+            }),
+            device.login('SHORTHEADER'),
+        ]);
+
+        expect(timeout).to.be.true;
+
+        await device.close(false);
+    });
+
+    it('connect and short length', async () => {
+        const device = new PH803WDevice('127.0.0.1');
+        await device.connect();
+
+        let err;
+        await Promise.any([
+            new Promise(resolve => {
+                device.on('error', resolve);
+            }).then(_err => {
+                err = _err;
+            }),
+            device.login('SHORTLENGTH'),
+        ]);
+
+        expect(err).to.be.equal('Ignore data package because invalid length')
+
+        await device.close(false);
+    });
+
+    it('connect and bad message type', async () => {
+        const device = new PH803WDevice('127.0.0.1');
+        await device.connect();
+
+        let err;
+        await Promise.any([
+            new Promise(resolve => {
+                device.on('error', resolve);
+            }).then(_err => {
+                err = _err;
+            }),
+            device.login('BADDATA'),
+        ]);
+
+        expect(err).to.be.equal('Ignore data package because invalid message type 255')
+
+        await device.close(false);
+    });
+
+    it('connect and short data', async () => {
+        const device = new PH803WDevice('127.0.0.1');
+        await device.connect();
+
+        let err;
+        await Promise.any([
+            new Promise(resolve => {
+                device.on('error', resolve);
+            }).then(_err => {
+                err = _err;
+            }),
+            device.login('SHORTDATA'),
+        ]);
+
+        expect(err).to.be.equal('Ignore data package because invalid length')
+
+        await device.close(false);
+    });
+
+    it('connect and login, get additional data', async () => {
+        const device = new PH803WDevice('127.0.0.1');
+        await device.connect();
+
+        let data;
+        await Promise.all([
+            new Promise(resolve => {
+                device.on('data', resolve);
+            }).then(async _data => {
+                data = _data;
+            }),
+            device.login('DOTHESPLIT'),
+        ])
+
+        expect(data).to.exist;
+        expect(data.ph).to.equal(7.32);
+        expect(data.redox).to.equal(205);
+        expect(data.phOutlet).to.be.true;
+        expect(data.redoxOutlet).to.be.true;
+
+        await device.close(false);
+    });
 
     after('shutdown server', async () => {
         await testServer.close();

@@ -1,0 +1,3449 @@
+swagger: '2.0'
+info:
+  version: "2.36.0"
+  title: Gizwits Open API
+  description: |
+    This page is the debugging page of Gizwits Open API, which contains a list of all Open API interfaces you can call.
+
+    To view the Open API Guidelines, please click [Open API Guidelines](http://docs.gizwits.com/en-us/cloud/OpenAPI.html).
+host: api.gizwits.com
+
+schemes:
+  - https
+security:
+  - app_id: []
+
+paths:
+  /app/users:
+    post:
+      summary: Create user
+      tags:
+        - User Management
+      description: |
+        ### There are several ways to create a user:
+
+        - Create anonymous user, parameter: phone_id
+        - Create a common user, parameters: username, password
+        - Create a mobile phone user, parameters: phone, password, code; code needs to be obtained by calling the Get SMS Verification Code API first
+        - Create mailbox user, parameters: email, password
+        - Create a third-party login user, parameter authData
+        - Password-free registration and login, parameters: phone, code; code needs to be obtained by calling the Get SMS Verification Code API first
+
+        **Notice:**
+        - These third-party logins are not supported in China: facebook, twitter, google, amazon;
+        - If you use QQ third-party login, you need to fill in the appid obtained from the QQ Internet registration application in the developer center;
+        - If you use twitter third-party login, you need to fill in the consumer_key and consumer_secret obtained from the twitter registration application in the developer center;
+        - If you use google or amazon third-party login, the `token` in authData needs to start with "Bearer" (note that there is a space);
+
+      security:
+        - app_id: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: user info
+          required: true
+          schema:
+            $ref: "#/definitions/CreateUserForm"
+      responses:
+        "201":
+          description: get token
+          schema:
+            $ref: "#/definitions/UserTokenModel"
+
+    put:
+      summary: Modify user information
+      tags:
+        - User Management
+      description: |
+        ### Modify user information
+
+        * Anonymous users to ordinary users: enter username, password
+        * Anonymous user to mobile phone user: Enter phone, password, code (obtained through the get verification code interface)
+        * Modify password: enter old_pwd, new_pwd
+        * Modify mobile phone number: Enter phone, code (obtained through the interface for obtaining verification code)
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: user info
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateUserForm"
+      responses:
+        "200":
+          description: update success
+          schema:
+            properties:
+              updatedAt:
+                type: string
+                description: "2011-11-07T21:25:10.623Z"
+
+    get:
+      summary: Get user information
+      tags:
+        - User Management
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Successfully obtained user information
+          schema:
+            $ref: "#/definitions/UserModel"
+
+  /app/login:
+    post:
+      summary: User login
+      tags:
+        - User Management
+      description: |
+        The value of username can be the user's username/email/phone
+      security:
+        - app_id: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: login information
+          required: true
+          schema:
+            $ref: "#/definitions/LoginForm"
+      responses:
+        "200":
+          description: Successfully obtained token
+          schema:
+            $ref: "#/definitions/UserTokenModel"
+
+  /app/logout:
+    delete:
+      summary: User logged out
+      description: User logged out
+      tags:
+        - User Management
+      security:
+        - app_id: []
+        - user_token: []
+      responses:
+        "204":
+          description: User logout response is empty
+
+  /app/request_token:
+    post:
+      summary: Get App Token
+      tags:
+        - User Management
+      schemes:
+        - http
+        - https
+      security:
+        - app_id: []
+      parameters:
+        - in: header
+          name: X-Gizwits-Application-Auth
+          type: string
+          description: Signature algorithm lower(MD5(appid + appsecret))
+          required: true
+      responses:
+        "200":
+          description: Successfully obtained Token
+          schema:
+            properties:
+              token:
+                type: string
+              expired_at:
+                type: integer
+
+  /app/reset_password:
+    post:
+      summary: 请求重置密码
+      tags:
+        - User Management
+      description: |
+        只有设置了 email 或者 phone 的用户才可以重置密码。
+
+        - 通过 email 重置密码，传入 email
+        - 通过 phone 重置密码，传入 phone, new_pwd, code (通过调用获取短信验证码接口获取)
+      security:
+        - app_id: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 重置密码信息
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              phone:
+                type: string
+              new_pwd:
+                type: string
+              code:
+                type: string
+      responses:
+        "200":
+          description: success
+
+  /app/sms_code:
+    post:
+      summary: 获取及验证短信验证码
+      tags:
+        - User Management
+      description: |
+        获取短信验证码只需要传入 phone
+
+        验证短信验证码需要传入 phone 和 code
+
+        ### 关于国外手机号
+
+        发送短信验证码到国外手机号，需要遵循如下格式：+{国家码}{手机号}
+
+        假设一个美国（国家码为 1）的手机号为 4246531234，那么 phone 就应该填写为 "+14246531234"
+
+        国家码列表可以通过[这里](http://www.itu.int/dms_pub/itu-t/opb/sp/T-SP-E.164D-11-2011-PDF-E.pdf)获取。
+      security:
+        - app_id: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: X-Gizwits-Application-Token
+          in: header
+          type: string
+          required: true
+          description: 通过 POST /app/request_token 获取
+        - in: body
+          name: body
+          description: 验证码
+          required: true
+          schema:
+            type: object
+            properties:
+              phone:
+                type: string
+              code:
+                type: string
+      responses:
+        "200":
+          description: success
+
+  /app/verify/codes:
+    get:
+      summary: 获取图片验证码
+      tags:
+        - User Management
+      security:
+        - app_id: []
+      parameters:
+        - in: header
+          name: X-Gizwits-Application-Token
+          description: 通过 POST /app/request_token 获取
+          type: string
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              captcha_url:
+                type: string
+                description: 验证码图片 URL
+              captcha_id:
+                type: string
+
+    post:
+      summary: 校验图片验证码并发送短信
+      tags:
+        - User Management
+      security:
+        - app_id: []
+      parameters:
+        - in: header
+          name: X-Gizwits-Application-Token
+          description: 通过 POST /app/request_token 获取
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: verify captch
+          required: true
+          schema:
+            type: object
+            properties:
+              captcha_id:
+                type: string
+              captcha_code:
+                type: string
+              phone:
+                type: string
+      responses:
+        "200":
+          description: success
+
+    put:
+      summary: 校验短信验证码
+      tags:
+        - User Management
+      security:
+        - app_id: []
+      parameters:
+        - in: header
+          name: X-Gizwits-Application-Token
+          description: 通过 POST /app/request_token 获取
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: verify sms code
+          required: true
+          schema:
+            type: object
+            properties:
+              phone:
+                type: string
+              sms_code:
+                type: string
+      responses:
+        "200":
+          description: success
+
+  /app/messages:
+    get:
+      summary: 查询消息列表
+      tags:
+        - 消息中心
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: type
+          in: query
+          type: integer
+          enum: [1]
+          required: true
+          description: 消息类型，1：设备分享消息
+        - in: query
+          name: limit
+          description: 返回的条数
+          type: integer
+          required: false
+          default: 20
+        - in: query
+          name: skip
+          description: 跳过的条数
+          type: integer
+          required: false
+          default: 0
+      responses:
+        "200":
+          description: 成功获取消息列表
+          schema:
+            $ref: "#/definitions/MessageList"
+
+  /app/messages/{id}:
+    put:
+      summary: 标记消息已读、删除状态
+      tags:
+        - 消息中心
+      description: |
+        用户只能标记或删除自己的消息
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: 消息id
+        - name: status
+          in: query
+          type: integer
+          enum: [1, 2]
+          required: true
+          description: 消息状态：1：已读，2：删除
+      responses:
+        "200":
+          description: success
+
+  /app/bind_mac:
+    post:
+      summary: 根据 MAC 绑定设备
+      tags:
+        - 绑定管理
+      description: |
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+
+        #### api.2.6.8
+
+        - 新增 3 个返回值：port_s, ws_port, wss_port
+
+        #### api.2.23.1
+        - 新增 2 个返回值：mesh_id, gw_did
+          - mesh_id：蓝牙设备在 mesh 网络中的 id
+          - gw_did：(蓝牙)设备的数据通道(网关)设备did
+
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: X-Gizwits-Timestamp
+          type: string
+          description: 请求时间戳，与服务器相差不能超过 5 分钟
+          required: true
+        - in: header
+          name: X-Gizwits-Signature
+          type: string
+          description: 签名，计算方法为 lower(md5(product_secret + timestamp)), timestamp 需与 X-Gizwits-Timestamp 一致
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              product_key:
+                type: string
+              mac:
+                type: string
+              remark:
+                type: string
+              dev_alias:
+                type: string
+              set_owner:
+                type: integer
+                description: |
+                  - 是否设置成 owner，只对开启了设备分享功能的产品有效；
+                  - 0：不设置成owner，1：设置成owner，默认值为 0；
+            required:
+              - product_key
+              - mac
+      responses:
+        "201":
+          description: success
+          schema:
+            $ref: "#/definitions/DeviceItem"
+
+  /app/bindings:
+    delete:
+      summary: 解除绑定
+      tags:
+        - 绑定管理
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 绑定设备列表
+          required: true
+          schema:
+            type: object
+            properties:
+              devices:
+                type: array
+                items:
+                  properties:
+                    did:
+                      type: string
+                  required:
+                    - did
+            required:
+              - devices
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              success:
+                type: array
+                items:
+                  type: string
+              failed:
+                type: array
+                items:
+                  type: string
+
+    get:
+      summary: 获取绑定列表
+      tags:
+        - 绑定管理
+      description: |
+        按绑定时间倒序排序
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+
+        #### api.2.7.0
+
+        - 添加 show_proto_ver 参数，如果设置该参数，则返回 proto_ver 字段
+
+        #### api.2.6.8
+
+        - 列表设备添加 port_s, ws_port, wss_port 三个字段
+
+        #### api.2.23.1
+        - 新增 2 个返回值：mesh_id, gw_did
+          - mesh_id：蓝牙设备在 mesh 网络中的 id
+          - gw_did：(蓝牙)设备的数据通道(网关)设备did
+
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          description: 返回的条数
+          type: integer
+          required: false
+          default: 20
+        - in: query
+          name: skip
+          description: 跳过的条数
+          type: integer
+          required: false
+          default: 0
+        - in: query
+          name: show_disabled
+          description: 是否显示已注销的设备
+          type: integer
+          required: false
+        - in: query
+          name: show_proto_ver
+          description: 是否显示设备通信协议版本
+          type: integer
+          required: false
+        - in: query
+          name: lan_prot_ver
+          description: 是否显示小循环通信协议版本
+          type: integer
+          required: false
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/DeviceList"
+
+  /app/bind_latest:
+    post:
+      summary: 通过 QRCode 绑定设备
+      tags:
+        - 绑定管理
+      description: |
+        必须是通过机智云的二维码生成服务生成的二维码才可以调用本接口。
+        TODO 二维码生成服务链接
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              qr_content:
+                type: string
+              set_owner:
+                type: integer
+                description: |
+                  - 是否设置成 owner，只对开启了设备分享功能的产品有效；
+                  - 0：不设置成owner，1：设置成owner，默认值为 0；
+            required:
+              - qr_content
+      responses:
+        "201":
+          description: bind success
+
+  /app/bindings/{did}:
+    put:
+      summary: 修改绑定信息
+      tags:
+        - 绑定管理
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: did
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ModifyBindingForm"
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/ModifyBindingForm"
+
+  /app/{did}/bindings:
+    get:
+      summary: 查询设备 Guest 用户
+      tags:
+        - 绑定管理
+      description: |
+        此接口只有 Owner 用户可调用，只返回 Guest 的用户信息，不返回自己的用户信息
+      security:
+        - app_id: []
+        - user_token: []
+      produces:
+        - application/json
+      parameters:
+        - name: did
+          in: path
+          type: string
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/BindingUserList"
+
+    delete:
+      summary: 解绑 Guest 用户
+      tags:
+        - 绑定管理
+      description: |
+        此接口只有owner用户可调用
+      security:
+        - app_id: []
+        - user_token: []
+      produces:
+        - application/json
+      parameters:
+        - name: did
+          in: path
+          type: string
+          required: true
+        - name: uid
+          in: query
+          type: string
+          required: true
+          description: guest 的 uid，不能是自己
+      responses:
+        "200":
+          description: success
+
+  /app/devdata/{did}/latest:
+    get:
+      summary: 获取设备最新状态
+      tags:
+        - Equipment remote monitoring
+      security:
+        - app_id: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: did
+          type: string
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              did:
+                type: string
+              updated_at:
+                type: string
+              attr:
+                type: object
+                description: 设备数据点 key-value
+
+  /app/datapoint:
+    get:
+      summary: Get product data point definitions
+      tags:
+        - Equipment remote monitoring
+      description: |
+        ### API call limit
+
+        - AppID and product_key association
+        - AppID is super AppID
+      security:
+        - app_id: []
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: product_key
+          type: string
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/DataPoint"
+
+  /app/devices/{did}:
+    get:
+      summary: Get device details
+      tags:
+        - Equipment remote monitoring
+      description: |
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+
+        **需要有绑定关系才可查询**
+
+        #### api.2.6.8
+
+        - 添加 port_s, ws_port, wss_port 三个返回值
+
+        #### api.2.23.1
+        - 新增 2 个返回值：mesh_id, gw_did
+          - mesh_id：蓝牙设备在 mesh 网络中的 id
+          - gw_did：(蓝牙)设备的数据通道(网关)设备did
+
+      security:
+        - app_id: []
+        - user_token: []
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: did
+          type: string
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/DeviceItem"
+
+  /app/devices/{did}/raw_data:
+    get:
+      summary: 获取设备在指定时间段内的通信日志,上下线记录
+      tags:
+        - Equipment remote monitoring
+      description: |
+        ### 说明
+
+        - 此接口只在产品未发布的情况下使用，产品发布后如要使用，请联系我们的工作人员。
+
+        ### 请求与响应 type 字段说明
+
+        - 通信日志查询, type 字段为 cmd
+        - 上下线记录查询, type 字段为 online
+        - 通信数据查询返回数据字段的 type 字段为 app2dev(app 到设备的通信), dev2app(设备到 app 的通信)
+        - 上下线查询返回数据的 type 字段为 dev_online(上线), dev_re_online(完成离线流程前再次登陆), dev_offline(离线)
+      security:
+        - app_id: []
+        - user_token: []
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: did
+          type: string
+          required: true
+        - in: query
+          name: type
+          type: string
+          required: true
+          enum: ["cmd", "online"]
+        - in: query
+          name: start_time
+          type: integer
+          description: |
+            起始时间戳,单位秒,大于此时间戳内的通信日志将被查询到
+          required: true
+        - in: query
+          name: end_time
+          type: integer
+          required: true
+          description: |
+            - 终止时间戳,单位秒,小于等于此时间戳内的通信日志将被查询到
+            - 终止时间戳必须大于起始时间戳.
+            - 终止时间戳与起始时间戳之差必须小于48小时
+            - 终止时间戳需要小于等于当前时间点
+        - in: query
+          name: skip
+          description: |
+            跳过的条数,跳过条目数+返回条目数必须<=5000, 默认为0
+          type: integer
+          required: false
+          default: 0
+        - in: query
+          name: limit
+          description: |
+            返回的条数,需<=1000,默认为20
+          type: integer
+          required: false
+          default: 20
+        - in: query
+          name: sort
+          description: |
+            排序,默认降序
+          type: string
+          required: false
+          default: "desc"
+          enum: ["asc", "desc"]
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/DeviceRTData"
+
+  /app/control/{did}:
+    post:
+      summary: 远程控制设备
+      tags:
+        - Equipment remote monitoring
+      description: |
+        ### 远程控制设备可以通过两种方式
+
+        - 原始指令: raw
+        <pre>
+        发送 0090 命令，只需要包括 payload 即可
+        二进制转 byte 数组，如要发送 payload 为 010203，就是
+        {
+          "raw": [1, 2, 3]
+        }
+        </pre>
+        - 数据点方式: attrs
+        <pre>
+        设备产品必须定义了数据点，比如要设置温度 temp 为 30 度
+        {
+          "attrs": {
+            "temp": 30
+          }
+        }
+        </pre>
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: did
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: 控制指令
+          required: true
+          schema:
+            type: object
+            properties:
+              raw:
+                type: array
+                items:
+                  type: integer
+              attrs:
+                type: object
+      responses:
+        "200":
+          description: success
+
+  /app/sharing:
+    get:
+      summary: 查询分享邀请
+      tags:
+        - 设备分享
+      description: |
+        - 若 sharing_type 为 0，表示以 Owner 身份查询自己发出的分享邀请，返回结果中用户信息为 Guest 的信息
+        - 若 sharing_type 为 1，表示以 Guest 身份查询收到的分享邀请，返回结果中的用户信息为 Owner 的信息
+        - status可选，默认返回全部分享状态
+        - did 可选，默认不指定设备 did
+        - skip 可选，默认为0
+        - limit 可选，默认为20
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: sharing_type
+          in: query
+          type: integer
+          enum: [0, 1]
+          required: true
+          description: 分享类型，0：我分享的设备，1：分享给我的设备
+        - name: status
+          in: query
+          type: string
+          required: false
+          description: 分享状态，逗号分隔，0：未接受分享，1：已接受分享，2：拒绝分享
+        - name: did
+          in: query
+          type: string
+          required: false
+          description: 指定的设备did，只有owner用户可查询指定did的分享信息
+        - in: query
+          name: limit
+          description: 返回的条数
+          type: integer
+          required: false
+          default: 20
+        - in: query
+          name: skip
+          description: 跳过的条数
+          type: integer
+          required: false
+          default: 0
+      responses:
+        "200":
+          description: 成功获取分享信息
+          schema:
+            $ref: "#/definitions/SharingDeviceList"
+
+    post:
+      summary: 创建设备分享
+      tags:
+        - 设备分享
+      description: |
+        - 此接口只有设备主账号可以调用；
+        - type：分享类型，0：普通分享，1：二维码分享；
+        - 如果 type 为普通分享，uid/username/email/phone 四选一，为是被分享者的用户信息；
+        - 如果 type 为二维码分享，uid、username、email、phone 设置为空；
+        - 针对二维码分享，客户端收到返回的二维码内容之后，本地生成二维码图片；
+        - 普通分享24小时过期，二维码分享15分钟过期；
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 分享设备请求信息
+          required: true
+          schema:
+            type: object
+            properties:
+              type:
+                type: integer
+                enum: [0, 1]
+                description: 分享类型，0：普通分享，1：二维码分享
+              did:
+                type: string
+              uid:
+                type: string
+              username:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+              duration:
+                type: integer
+                description: |
+                  - 可选参数；
+                  - 持续分享时间，guest 接受分享之后可使用设备的时长，单位：分钟
+                  - 若设置改值，则最小时长 1 分钟，最大时长 1440 分钟
+            required: ["type", "did"]
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              id:
+                type: integer
+                description: 分享记录id，针对普通分享才有
+              qr_content:
+                type: string
+                description: 二维码图片内容，针对二维码分享才有
+
+  /app/sharing/{id}:
+    put:
+      summary: 接受/拒绝分享
+      tags:
+        - 设备分享
+      description: |
+        此接口只有 Guest 可以调用
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: 分享记录id
+        - name: status
+          in: query
+          type: integer
+          enum: [1, 2]
+          required: true
+          description: |
+            接受/拒绝分享，1：接受分享，2：拒绝分享
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              id:
+                type: integer
+                description: 分享记录id
+
+    delete:
+      summary: 取消/收回分享
+      tags:
+        - 设备分享
+      description: |
+        此接口只有 Owner 可以调用
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: 分享记录id
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              id:
+                type: integer
+                description: 分享记录id
+
+  /app/sharing/code/{code}:
+    get:
+      summary: 根据邀请码查询分享邀请
+      tags:
+        - 设备分享
+      description: |
+        Owner 不能调用该接口
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: code
+          in: path
+          type: string
+          required: true
+          description: 二维码邀请码
+      responses:
+        "200":
+          description: 成功获取分享信息
+          schema:
+            $ref: "#/definitions/SharingCodeModel"
+
+    post:
+      summary: 扫码接受分享邀请
+      tags:
+        - 设备分享
+      description: |
+        此接口只有 Guest 可以调用
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: code
+          in: path
+          type: string
+          required: true
+          description: 二维码邀请码
+      responses:
+        "200":
+          description: success
+
+  /app/sharing/{id}/alias:
+    put:
+      summary: 修改用户备注信息
+      tags:
+        - 设备分享
+      description: |
+        - 如果用户为 Owner ，则修改 guest_alias 为请求的 user_alias
+        - 如果用户为 Guest ，则修改 owner_alias 为请求的 user_alias
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: 分享记录id
+        - name: user_alias
+          in: query
+          type: string
+          required: true
+          description: 昵称备注
+      responses:
+        "200":
+          description: success
+
+  /app/sharing/{did}/transfer:
+   post:
+      summary: owner 权限转移
+      tags:
+        - 设备分享
+      description: |
+        - owner 转移权限给 guest，此接口只有 owner 可以调用；
+        - 转移之后自己将变成 guest 用户，对方变成 owner 用户；
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: did
+          in: path
+          type: string
+          required: true
+          description: 设备 did
+        - name: uid
+          in: query
+          type: string
+          required: true
+          description: guest 用户的 uid
+      responses:
+        "200":
+          description: success
+
+  /app/group:
+    get:
+      summary: 查询用户所有的分组
+      tags:
+        - 设备分组
+      description: |
+        - 查询用户所有的分组
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: 成功获取设备分组信息
+          schema:
+            $ref: "#/definitions/GroupList"
+
+    post:
+      summary: 创建分组
+      tags:
+        - 设备分组
+      description: |
+        - 创建分组;
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              product_key:
+                type: string
+                description: 可选，产品 product_key
+              group_name:
+                type: string
+                description: 分组名称
+              gw_did:
+                type: string
+                description: 可选，网关设备ID
+              multicast_id:
+                type: string
+                description: 可选，蓝牙组播ID，整型数字字符串，其范围为0~65534
+              remark:
+                type: string
+                description: 分组备注信息
+            required:
+              - group_name
+      responses:
+        "201":
+          description: success
+          schema:
+            properties:
+              id:
+                type: string
+                description: 分组 id
+
+  /app/group/{id}:
+    put:
+      summary: 修改分组信息
+      tags:
+        - 设备分组
+      description: |
+        - 创建分组;
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 设备分组 id
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              group_name:
+                type: string
+                description: 分组名称
+            required:
+              - group_name
+      responses:
+        "200":
+          description: success
+
+    delete:
+      summary: 删除设备分组
+      tags:
+        - 设备分组
+      description: |
+        - 删除设备分组;
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 设备分组 id
+      responses:
+        "200":
+          description: success
+
+  /app/group/{id}/devices:
+    get:
+      summary: 查询分组的设备信息
+      tags:
+        - 设备分组
+      description: |
+        - 查询分组的设备信息
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 设备分组 id
+      responses:
+        "200":
+          description: 成功获取分组里面的设备列表
+          schema:
+            $ref: "#/definitions/GroupDevicesList"
+
+    post:
+      summary: 将设备列表添加到分组
+      tags:
+        - 设备分组
+      description: |
+        - 将设备列表添加到分组
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 设备分组 id
+        - name: show_detail
+          in: query
+          type: integer
+          enum: [0, 1]
+          required: false
+          default: 0
+          description: |
+            - 可选字段，默认0;
+            - 1： 添加失败的did返回详细错误信息，
+            - 0或未设置该参数：添加失败的did，不返回详细错误信息；
+        - in: body
+          name: body
+          required: true
+          description: |
+            - 设备 did 列表;
+          schema:
+            properties:
+              dids:
+                type: array
+                items:
+                  type: string
+      responses:
+        "200":
+          description: 结果
+          schema:
+            properties:
+              success:
+                type: array
+                items:
+                  type: string
+              failed:
+                type: array
+                items:
+                  type: string
+              detail:
+                type: array
+                items:
+                  properties:
+                    did:
+                      type: string
+                    error_code:
+                      type: integer
+                    error_message:
+                      type: string
+                    detail_msg:
+                      type: string
+                      description: |
+                        - 添加失败的did的详细错误信息；
+                        - 只有请求参数设置了show_detail为1时候才会返回此字段；
+
+    delete:
+      summary: 将设备列表从分组移除
+      tags:
+        - 设备分组
+      description: |
+        - 将设备列表从分组移除
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 设备分组 id
+        - in: body
+          name: body
+          required: true
+          description: |
+            - 设备 did 列表;
+          schema:
+            properties:
+              dids:
+                type: array
+                items:
+                  type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              success:
+                type: array
+                items:
+                  type: string
+              failed:
+                type: array
+                items:
+                  type: string
+
+  /app/group/{id}/control:
+    post:
+      summary: 针对设备分组发送指令远程控制设备
+      tags:
+        - 设备分组
+      description: |
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+
+        ### 远程控制设备可以通过两种方式
+
+        - 原始指令: raw
+        <pre>
+        二进制转 byte 数组，如要发送 010203，就是
+        {
+          "raw": [1, 2, 3]
+        }
+        </pre>
+        - 数据点方式: attrs
+        <pre>
+        设备产品必须定义了数据点，比如要设置温度 temp 为 30 度
+        {
+          "attrs": {
+            "temp": 30
+          }
+        }
+        </pre>
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 设备分组 id
+        - in: body
+          name: body
+          description: 控制指令
+          required: true
+          schema:
+            type: object
+            properties:
+              raw:
+                type: array
+                items:
+                  type: integer
+              attrs:
+                type: object
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/GroupControlResultList"
+
+
+  /app/rules/params:
+    get:
+      summary: 查询规则可用变量
+      tags:
+        - 设备联动
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: product_key
+          description: 多个pk用“,”隔开，参数为空时默认选中与appid绑定的所有pk，填入与appid无绑定的pk时该pk无效
+          type: string
+          required: true
+      responses:
+        "200":
+          description: 成功规则可用变量
+
+  /app/rules:
+    get:
+      summary: 查询联动规则列表
+      tags:
+        - 设备联动
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          description: 返回的条数
+          type: integer
+          required: false
+          default: 20
+        - in: query
+          name: skip
+          description: 跳过的条数
+          type: integer
+          required: false
+          default: 0
+      responses:
+        "200":
+          description: 成功获取规则列表
+          schema:
+            $ref: "#/definitions/RulesList"
+
+    post:
+      summary: 创建联动规则
+      tags:
+        - 设备联动
+      description: |
+        ### product_key与did:
+        <pre>
+        当触发方式为online/offline/alert/fault/data时, 产生这个触发方式的设备由该参数指定, 以下把指定的这个设备称为主设备
+        </pre>
+
+        ### event参数表示该规则的触发方式,以下是可选值的意义:
+        <pre>
+        online  - 设备上线
+        offline - 设备下线
+        alert   - 设备某个报警数据点发生报警
+        fault   - 设备某个故障数据点发生故障
+        data    - 设备上报状态
+        </pre>
+
+        ### event_attr参数表示,当触发方式为alert(报警)/fault(故障)时, 发生这个报警/故障的数据点,以及报警/故障的发生/恢复,由该参数指定
+        <pre>
+        "event_attr": {
+            "attr_name": "datapoint_alert", ---- 发生这个报警/故障的数据点
+            "value": "1"                    ---- 报警/故障的发生/取消, 值为1时表示发生, 值为0时表示取消
+        }
+        注: 这里提到的报警/故障的"发生"指的是－设备上一次上报的报警/故障数据点的值为0, 这一次上报的为1, 那么报警/故障发生
+            这里提到的报警/故障的"恢复"指的是－设备上一次上报的报警/故障数据点的值为1, 这一次上报的为0, 那么报警/故障恢复
+            其他情况均不属于"发生"和"恢复"
+        </pre>
+
+        ### input指定规则中需要用到的设备数据,数组中每一个对象代表一个设备的数据,不需要使用设备数据时可忽略此参数:
+        <pre>
+        [{
+            "product_key": "pk1", ---- 设备所属Product key
+            "did": "did1",        ---- 设备did
+            "prefix": "device1"   ---- 用于在条件及输出中引用这个设备的数据点值的前缀, 如设置了这个参数为device1时,
+                                       则device1.datapoint1表示引用这个设备的标识名为datapoint1的数据点
+        }]
+        </pre>
+
+        ### condition指定触发规则需要满足的条件, 云端处理时将逐组检查数组内的条件, 任意一组条件满足时触发输出
+        <pre>
+        [
+            [{
+                "left": "device1.datapoint1", ---- 左比较参数, 参数的值类型需要和右比较参数一致
+                "opt": "==",                  ---- 比较运算符, 可选值有: >, >=, <, <=, ==, != (注:只有数值类型才能比较大小)
+                "right": "1"                  ---- 右比较参数, 参数的值类型需要和左比较参数一致,
+                                                   使用常数时注意,"1"代表数字1,"'1'"或"\"1\""才是字符串"1"
+            }],
+            [{                                ---- 每个数组表示一组条件，当这个组里的所有条件都满足时，这一组条件满足
+                "left": "device1.datapoint1",
+                "opt": "==",
+                "right": "1"
+            },{
+                "left": "device2.datapoint2",
+                "opt": ">",
+                "right": "25"
+            }]
+        ]
+        </pre>
+
+        ### output指定当条件满足时, 需要做的事情，可认为云端同时执行各组动作，各组之间互不影响
+        <pre>
+        [
+            [{                            ---- 每个数组表示一组输出动作，按顺序执行，前面的动作执行失败时，后面不会执行
+                "type": "devctrl",        ---- output的类型, devctrl表示控制设备
+                "did": "did1",            ---- 指定被控制的设备的did
+                "attrs": {                ---- key-value形式
+                    "datapoint1": 1,      ---- 设置datapoint1值为1
+                    "datapoint2": 25,
+                    "datapoint3": "黄色"
+                }
+            },{
+                "type": "delay",          ---- output的类型, delay表示延时
+                "delay": 5                ---- 延时时长, 单位:秒
+            },{
+                "type": "devctrl",
+                "did": "QxP6E9qFwwzsqKb2UYf4uw",
+                "raw": [1, 2, 3]          ---- raw形式
+            }],
+            [{
+                "type": "devctrl",
+                "did": "QxP6E9qFwwzsqKb2UYf4uw",
+                "attrs": {
+                    "datapoint1": 1,
+                    "datapoint2": 25,
+                    "datapoint3": "黄色"
+                }
+            }]
+        ]
+        </pre>
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 创建联动规则请求信息
+          required: true
+          schema:
+            $ref: '#/definitions/Rules'
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              rule_id:
+                type: integer
+                description: 联动规则id
+
+  /app/rules/{rule_id}:
+    put:
+      summary: 修改联动规则
+      tags:
+        - 设备联动
+      description: |
+        ### product_key与did:
+        <pre>
+        当触发方式为online/offline/alert/fault/data时, 产生这个触发方式的设备由该参数指定, 以下把指定的这个设备称为主设备
+        </pre>
+
+        ### event参数表示该规则的触发方式,以下是可选值的意义:
+        <pre>
+        online  - 设备上线
+        offline - 设备下线
+        alert   - 设备某个报警数据点发生报警
+        fault   - 设备某个故障数据点发生故障
+        data    - 设备上报状态
+        </pre>
+
+        ### event_attr参数表示,当触发方式为alert(报警)/fault(故障)时, 发生这个报警/故障的数据点,以及报警/故障的发生/恢复,由该参数指定
+        <pre>
+        "event_attr": {
+            "attr_name": "datapoint_alert", ---- 发生这个报警/故障的数据点
+            "value": "1"                    ---- 报警/故障的发生/取消, 值为1时表示发生, 值为0时表示取消
+        }
+        注: 这里提到的报警/故障的"发生"指的是－设备上一次上报的报警/故障数据点的值为0, 这一次上报的为1, 那么报警/故障发生
+            这里提到的报警/故障的"恢复"指的是－设备上一次上报的报警/故障数据点的值为1, 这一次上报的为0, 那么报警/故障恢复
+            其他情况均不属于"发生"和"恢复"
+        </pre>
+
+        ### input指定规则中需要用到的设备数据,数组中每一个对象代表一个设备的数据,不需要使用设备数据时可忽略此参数:
+        <pre>
+        [{
+            "product_key": "pk1", ---- 设备所属Product key
+            "did": "did1",        ---- 设备did
+            "prefix": "device1"   ---- 用于在条件及输出中引用这个设备的数据点值的前缀, 如设置了这个参数为device1时,
+                                       则device1.datapoint1表示引用这个设备的标识名为datapoint1的数据点
+        }]
+        </pre>
+
+
+        ### condition指定触发规则需要满足的条件, 云端处理时将逐组检查数组内的条件, 任意一组条件满足时触发输出
+        <pre>
+        [
+            [{
+                "left": "device1.datapoint1", ---- 左比较参数, 参数的值类型需要和右比较参数一致
+                "opt": "==",                  ---- 比较运算符, 可选值有: >, >=, <, <=, ==, != (注:只有数值类型才能比较大小)
+                "right": "1"                  ---- 右比较参数, 参数的值类型需要和左比较参数一致,
+                                                   使用常数时注意,"1"代表数字1,"'1'"或"\"1\""才是字符串"1"
+            }],
+            [{                                ---- 每个数组表示一组条件，当这个组里的所有条件都满足时，这一组条件满足
+                "left": "device1.datapoint1",
+                "opt": "==",
+                "right": "1"
+            },{
+                "left": "device2.datapoint2",
+                "opt": ">",
+                "right": "25"
+            }]
+        ]
+        </pre>
+
+        ### output指定当条件满足时, 需要做的事情，可认为云端同时执行各组动作，各组之间互不影响
+        <pre>
+        [
+            [{                            ---- 每个数组表示一组输出动作，按顺序执行，前面的动作执行失败时，后面不会执行
+                "type": "devctrl",        ---- output的类型, devctrl表示控制设备
+                "did": "did1",            ---- 指定被控制的设备的did
+                "attrs": {                ---- key-value形式
+                    "datapoint1": 1,      ---- 设置datapoint1值为1
+                    "datapoint2": 25,
+                    "datapoint3": "黄色"
+                }
+            },{
+                "type": "delay",          ---- output的类型, delay表示延时
+                "delay": 5                ---- 延时时长, 单位:秒
+            },{
+                "type": "devctrl",
+                "did": "QxP6E9qFwwzsqKb2UYf4uw",
+                "raw": [1, 2, 3]          ---- raw形式
+            }],
+            [{
+                "type": "devctrl",
+                "did": "QxP6E9qFwwzsqKb2UYf4uw",
+                "attrs": {
+                    "datapoint1": 1,
+                    "datapoint2": 25,
+                    "datapoint3": "黄色"
+                }
+            }]
+        ]
+        </pre>
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: rule_id
+          in: path
+          type: integer
+          required: true
+        - in: body
+          name: body
+          description: 修改联动规则请求信息
+          required: true
+          schema:
+            $ref: '#/definitions/RulesUpdate'
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              rule_id:
+                type: integer
+                description: 联动规则id
+
+    delete:
+      summary: 删除联动规则
+      tags:
+        - 设备联动
+      description: |
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: rule_id
+          in: path
+          type: integer
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              rule_id:
+                type: integer
+                description: 联动规则id
+
+  /app/scene:
+    get:
+      summary: 查询用户所有的场景
+      tags:
+        - 用户场景
+      description: |
+        - 查询用户所有的场景
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: 成功获取用户场景信息
+          schema:
+            $ref: "#/definitions/SceneList"
+
+    post:
+      summary: 创建场景
+      tags:
+        - 用户场景
+      description: |
+        - 创建场景;
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              scene_name:
+                type: string
+                description: 场景名称
+              remark:
+                type: string
+                description: 场景备注
+              tasks:
+                type: array
+                items:
+                  $ref: "#/definitions/SceneTask"
+                description: 场景任务
+            required:
+              - scene_name
+              - tasks
+      responses:
+        "201":
+          description: success
+          schema:
+            properties:
+              id:
+                type: string
+                description: 场景 id
+
+  /app/scene/{id}:
+    put:
+      summary: 修改场景信息
+      tags:
+        - 用户场景
+      description: |
+        - 修改场景信息;
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 场景 id
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              scene_name:
+                type: string
+                description: 场景名称
+              remark:
+                type: string
+                description: 场景备注
+              tasks:
+                type: array
+                items:
+                  $ref: "#/definitions/SceneTask"
+                description: 场景任务
+      responses:
+        "200":
+          description: success
+
+    delete:
+      summary: 删除场景
+      tags:
+        - 用户场景
+      description: |
+        - 删除场景;
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 场景 id
+      responses:
+        "200":
+          description: success
+
+  /app/scene/{id}/task:
+    get:
+      summary: 查询场景任务执行状态
+      tags:
+        - 用户场景
+      description: |
+        - 查询场景任务执行状态;
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 场景 id
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            properties:
+              status:
+                type: integer
+                enum: [0, 1, 2, 3]
+                description: 场景任务执行状态：0：进行中，1：执行完成，2：执行失败, 3：任务未在执行
+
+    post:
+      summary: 执行场景任务
+      tags:
+        - 用户场景
+      description: |
+        - 执行场景任务;
+
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 场景 id
+      responses:
+        "200":
+          description: 返回成功，场景任务开始执行
+
+  /app/devices/{did}/scheduler:
+    get:
+      summary: 获取定时任务
+      tags:
+        - 定时任务管理
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: did
+          type: string
+          required: true
+        - in: query
+          name: limit
+          description: 返回的条数
+          type: integer
+          required: false
+          default: 20
+        - in: query
+          name: skip
+          description: 跳过的条数
+          type: integer
+          required: false
+          default: 0
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/DeviceSchedulerList"
+
+    post:
+      summary: 创建定时任务
+      tags:
+        - 定时任务管理
+      description: |
+        ### 创建一次性定时任务
+
+        - repeat 设置为 none
+        - date 和 time 必须填写，并且注意 date 和 time 为执行定时任务时的 UTC 时间
+
+        ### 创建按星期重复定时任务
+
+        - repeat 为重复星期，多个用逗号分隔；比如每周一执行，设置为 "mon"，每周一、周三执行，设置为 "mon,wed"；
+        - 星期可选值为： mon,tue,wed,thu,fri,sat,sun
+        - time 必须填写，并且注意星期和 time 为执行定时任务时的 UTC 时间
+        - 可以选填 start_date 和 end_date 表示定时任务开启的日期范围
+
+        ### 创建按天重复的定时任务
+
+        - repeat 设置为 day
+        - days 设置为要执行的日期列表；比如每月 1 号执行，设置为 ["1"]；每月 1 号、15 号执行，设置为 ["1", "15"]
+        - time 必须填写，并且注意 days 和 time 为执行定时任务时的 UTC 时间
+        - 可以选填 start_date 和 end_date 表示定时任务开启的日期范围
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: did
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: 定时任务
+          required: true
+          schema:
+            $ref: "#/definitions/DeviceSchedulerForm"
+      responses:
+        "201":
+          description: |
+            返回定时任务 ID，用于后续的修改和删除操作
+          schema:
+            properties:
+              id:
+                type: string
+
+  /app/devices/{did}/scheduler/{id}:
+    put:
+      summary: 修改定时任务
+      tags:
+        - 定时任务管理
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: did
+          type: string
+          required: true
+        - in: path
+          name: id
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: 定时任务
+          required: true
+          schema:
+            $ref: "#/definitions/DeviceSchedulerForm"
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              id:
+                type: string
+
+    delete:
+      summary: 删除定时任务
+      tags:
+        - 定时任务管理
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: did
+          type: string
+          required: true
+        - in: path
+          name: id
+          type: string
+          required: true
+      responses:
+        "200":
+          description: success
+
+  /app/common_scheduler:
+    get:
+      summary: 获取定时任务
+      tags:
+        - 通用定时任务
+      description: |
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+        - did, group_id, scene_id 参数只需传其中一个，分别用于查询设备，设备分组，用户场景定时任务，
+        - 若同时传了多个，则按此优先级取第一个有效字符串；
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: did
+          type: string
+          required: false
+          description: 设备 did
+        - name: group_id
+          in: query
+          type: string
+          required: false
+          description: 设备分组 id
+        - name: scene_id
+          in: query
+          type: string
+          required: false
+          description: 用户场景 id
+        - in: query
+          name: limit
+          description: 返回的条数
+          type: integer
+          required: false
+          default: 20
+        - in: query
+          name: skip
+          description: 跳过的条数
+          type: integer
+          required: false
+          default: 0
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/DeviceSchedulerList"
+
+    post:
+      summary: 创建定时任务
+      tags:
+        - 通用定时任务
+      description: |
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+        - did, group_id, scene_id 参数只需传其中一个，分别用于创建设备，设备分组，用户场景定时任务，
+        - 若同时传了多个，则按此优先级取第一个有效字符串；
+        - 针对场景任务，不需要传 raw 和 attrs 控制命令，传了会被忽略；
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 定时任务
+          required: true
+          schema:
+            $ref: "#/definitions/UserSchedulerForm"
+      responses:
+        "201":
+          description: success
+          schema:
+            properties:
+              id:
+                type: string
+
+  /app/common_scheduler/{id}:
+    put:
+      summary: 修改定时任务
+      tags:
+        - 通用定时任务
+      description: |
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+        - 针对场景任务，不需要传 raw 和 attrs 控制命令，传了会被忽略；
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 定时任务 id
+        - in: body
+          name: body
+          description: 定时任务
+          required: true
+          schema:
+            $ref: "#/definitions/DeviceSchedulerForm"
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              id:
+                type: string
+
+    delete:
+      summary: 删除定时任务
+      tags:
+        - 通用定时任务
+      description: |
+        ### 额外的请求头信息
+
+        - X-Gizwits-User-token
+      security:
+        - app_id: []
+        - user_token: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: 定时任务 id
+      responses:
+        "200":
+          description: success
+
+  /app/devdata/{did}/agg_data:
+    get:
+      summary: 获取聚合数据
+      description: |
+         此接口只在产品未发布的情况下使用，产品发布后如要使用，请联系我们的工作人员。
+      tags:
+        - 高级数据接口
+      security:
+        - app_id: []
+        - user_token: []
+      produces:
+        - application/json
+      parameters:
+        - name: did
+          in: path
+          type: string
+          required: true
+        - name: start_ts
+          in: query
+          type: integer
+          required: true
+          description: 单位为毫秒
+        - name: end_ts
+          in: query
+          type: integer
+          required: false
+          description: 单位为毫秒
+        - name: attrs
+          in: query
+          type: string
+          required: true
+          description: 数字类型数据点名称，多个数据点用逗号分隔
+        - name: aggregator
+          in: query
+          type: string
+          enum: ["sum", "avg", "max", "min"]
+          required: true
+        - name: unit
+          in: query
+          type: string
+          enum: ["HOURS", "DAYS", "WEEKS", "MONTHS"]
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/AggData"
+
+  /status:
+    get:
+      summary: 查询服务状态信息
+      tags:
+        - 系统信息
+      security:
+        - app_id: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: 成功获取服务状态信息
+          schema:
+            $ref: "#/definitions/StatusData"
+
+  /errors:
+    get:
+      summary: 错误状态码列表
+      tags:
+        - 系统信息
+      security:
+        - app_id: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: 成功获取错误状态码信息
+          schema:
+            $ref: "#/definitions/ErrorsData"
+
+securityDefinitions:
+  app_id:
+    type: apiKey
+    in: header
+    name: X-Gizwits-Application-Id
+  user_token:
+    type: apiKey
+    in: header
+    name: X-Gizwits-User-token
+
+definitions:
+  CreateUserForm:
+    properties:
+      phone_id:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+      code:
+        type: string
+      lang:
+        type: string
+        enum: ["en", "zh-cn"]
+      authData:
+        type: object
+        properties:
+          src:
+            type: string
+            enum: ["qq", "sina", "baidu", "wechat", "twitter", "facebook", "google", "amazon"]
+          uid:
+            type: string
+          token:
+            type: string
+            description: 用户 token
+          token_secret:
+            type: string
+            description: 针对 twitter 平台，需要传用户 token_secret
+
+  LoginForm:
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      lang:
+        type: string
+        enum: ["en", "zh-cn"]
+
+  UserTokenModel:
+    properties:
+      uid:
+        type: string
+      token:
+        type: string
+      expire_at:
+        type: integer
+
+  UpdateUserForm:
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      code:
+        type: string
+      old_pwd:
+        type: string
+      new_pwd:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+        maxLength: 128
+      gender:
+        type: string
+        enum: ["M", "F", "N"]
+      birthday:
+        type: string
+        description: YYYY-MM-DD or MM-DD
+      address:
+        type: string
+        maxLength: 256
+      lang:
+        type: string
+        enum: ["en", "zh-cn"]
+      remark:
+        type: string
+
+  UserModel:
+    allOf:
+      - properties:
+          uid:
+            type: string
+          is_anonymous:
+            type: boolean
+      - $ref: "#/definitions/UpdateUserForm"
+
+  DeviceItem:
+    properties:
+      product_key:
+        type: string
+      product_name:
+        type: string
+        description: 产品名称
+      did:
+        type: string
+      mac:
+        type: string
+      is_online:
+        type: boolean
+        description: 在线状态；针对 NB-IOT 产品，返回设备一直在线；
+      passcode:
+        type: string
+      host:
+        type: string
+      port:
+        type: integer
+        description: M2M 的 mqtt 端口号
+      port_s:
+        type: integer
+        description: M2M 的 mqtt SSL 端口号
+      ws_port:
+        type: integer
+        description: websocket 端口号
+      wss_port:
+        type: integer
+        description: websocket SSL 端口号
+      remark:
+        type: string
+        description: 设备备注
+      is_disabled:
+        type: boolean
+      type:
+        type: string
+        description: |
+          - 设备类型，"normal": 单品设备，"center_control": 中控设备，"sub_dev": 中控子设备
+      dev_alias:
+        type: string
+        description: 设备别名
+      dev_label:
+        type: array
+        items:
+          type: string
+        description: 设备标签列表，目前用于语音 API 批量设备控制
+      protoc:
+        type: integer
+        description: |
+          - 所属产品的网络类型，1: 蓝牙(BT)，2: 蓝牙(BLE)，3: wifi，4: 移动网络(CELLULAR)，5: NB-IOT
+      proto_ver:
+        type: string
+        enum: ["01", "01_01", "03", "04"]
+      lan_prot_ver:
+        type: string
+      role:
+        type: string
+        enum: ["special", "owner", "guest", "normal"]
+        description: 绑定角色
+      mesh_id:
+        type: string
+        description: "蓝牙设备在 Mesh 网络中的 ID"
+      gw_did:
+        type: string
+        description: "(蓝牙)设备所使用数据通道设备 DID"
+
+  DeviceList:
+    properties:
+      devices:
+        type: array
+        items:
+          $ref: "#/definitions/DeviceItem"
+
+  DeviceSchedulerForm:
+    properties:
+      raw:
+        type: string
+        description: |
+          - 原始指令: raw
+          <pre>
+          发送 0090 命令，只需要包括 payload 即可，如要发送 payload 为 010203，就是
+          {
+            "raw": "010203"
+          }
+          </pre>
+      attrs:
+        type: object
+      date:
+        type: string
+        format: date
+      time:
+        type: string
+        format: time
+        description: 定时任务执行的时间，精确到分钟，格式xx:xx，如：02:30
+      repeat:
+        type: string
+        description: |
+          - 不重复设置为 none
+          - 重复设置为 "mon", "tue", "wed", "thu", "fri", "sat", "sun" 的组合，组合之间用逗号分隔，如每周一和周二重复为 "mon,tue"
+          - 按日重复设置为 day
+      days:
+        type: array
+        items:
+          type: integer
+          minimum: 1
+          maximum: 31
+        maxLength: 31
+        description: 重复的日期列表，如[1, 15]表示每月1日和15日重复
+      start_date:
+        type: string
+        minLength: 10
+        maxLength: 10
+        format: date
+        description: 定时任务执行的开始日期，该天0点开始，格式xxxx-xx-xx，如2016-09-01
+      end_date:
+        type: string
+        minLength: 10
+        maxLength: 10
+        format: date
+        description: 定时任务执行的结束日期，该天24点结束，格式xxxx-xx-xx，如2016-10-01
+      enabled:
+        type: boolean
+        default: True
+        description: 是否启用，若不启用则时间到也不触发，默认启用
+      remark:
+        type: string
+        maxLength: 1024
+    required:
+      - time
+      - repeat
+
+  DeviceSchedulerModel:
+    allOf:
+      - $ref: "#/definitions/DeviceSchedulerForm"
+      - properties:
+          id:
+            type: string
+          created_at:
+            type: string
+            description: 返回的创建时间是 UTC 时间
+
+  DeviceSchedulerList:
+    type: array
+    items:
+      $ref: "#/definitions/DeviceSchedulerModel"
+
+  ModifyBindingForm:
+    properties:
+      remark:
+        type: string
+        description: 备注信息
+      dev_alias:
+        type: string
+        description: 设备别名
+      dev_label:
+        type: array
+        items:
+          type: string
+
+  AggQuery:
+    type: object
+    properties:
+      start_ts:
+        type: integer
+      end_ts:
+        type: integer
+      attrs:
+        type: string
+      aggregator:
+        type: string
+      unit:
+        type: string
+      did:
+        type: string
+
+  AggData:
+    properties:
+      query:
+        $ref: "#/definitions/AggQuery"
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            uid:
+              type: string
+            attrs:
+              type: object
+
+  DeviceRTData:
+    type: object
+    properties:
+      meta:
+        type: object
+        properties:
+            start_time:
+                type: integer
+            end_time:
+                type: integer
+            type:
+                type: string
+            did:
+                type: string
+            skip:
+                type: integer
+            limit:
+                type: integer
+            sort:
+                type: string
+            total:
+              type: integer
+      objects:
+        type: array
+        items:
+          type: object
+          properties:
+            type:
+              type: string
+            ip:
+              type: string
+            timestamp:
+              type: integer
+            payload_bin:
+              type: string
+
+  StatusData:
+    type: object
+    properties:
+      status:
+        type: object
+        properties:
+          version:
+            type: string
+
+  ErrorModel:
+    properties:
+      status:
+        type: integer
+      error_code:
+        type: string
+      error_message:
+        type: string
+
+  ErrorsData:
+    type: array
+    items:
+      $ref: "#/definitions/ErrorModel"
+
+  MessageMeta:
+    properties:
+      total:
+        type: integer
+      limit:
+        type: integer
+      skip:
+        type: integer
+      previous:
+        type: string
+      next:
+        type: string
+
+  MessageItem:
+    properties:
+      id:
+        type: string
+        description: 消息id
+      created_at:
+        type: string
+      updated_at:
+        type: string
+      type:
+        type: integer
+      status:
+        type: integer
+        enum: [0, 1, 2]
+        description: 0 未读，1 已读，2 删除
+      content:
+        type: string
+
+  MessageList:
+    properties:
+      meta:
+        $ref: "#/definitions/MessageMeta"
+      objects:
+        type: array
+        items:
+          $ref: "#/definitions/MessageItem"
+
+  RulesEventAttr:
+    properties:
+      attr_name:
+        type: string
+      value:
+        type: string
+        enum: ['0', '1']
+
+  RulesInput:
+    properties:
+      product_key:
+        type: string
+      did:
+        type: string
+      prefix:
+        type: string
+
+  RulesCondition:
+    properties:
+      left:
+        type: string
+      opt:
+        type: string
+        enum: ['>', '>=', '<=', '<', '!=', '==']
+      right:
+        type: string
+
+  RulesOutputAttrs:
+    properties:
+      <key>:
+        type: string
+        default: '<value>'
+
+  RulesOutput:
+    properties:
+      type:
+        type: string
+        enum: ['devctrl', 'delay']
+        description: devctrl 控制设备; delay 延迟若干秒
+      delay:
+        type: integer
+      did:
+        type: string
+      attrs:
+        $ref: "#/definitions/RulesOutputAttrs"
+      raw:
+        type: array
+        items:
+          type: integer
+
+  Rules:
+    properties:
+      product_key:
+        type: string
+      did:
+        type: string
+      name:
+        type: string
+      remark:
+        type: string
+      event:
+        type: string
+      event_attr:
+        $ref: '#/definitions/RulesEventAttr'
+      input:
+        type: array
+        items:
+          $ref: '#/definitions/RulesInput'
+      condition:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/RulesCondition'
+      output:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/RulesOutput'
+
+  RulesUpdate:
+    properties:
+      id:
+        type: integer
+      product_key:
+        type: string
+      did:
+        type: string
+      name:
+        type: string
+      remark:
+        type: string
+      event:
+        type: string
+      event_attr:
+        $ref: '#/definitions/RulesEventAttr'
+      input:
+        type: array
+        items:
+          $ref: '#/definitions/RulesInput'
+      condition:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/RulesCondition'
+      output:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/RulesOutput'
+
+  RulesList:
+    properties:
+      rules:
+        type: array
+        items:
+          $ref: "#/definitions/RulesUpdate"
+
+  SharingDeviceMeta:
+    properties:
+      total:
+        type: integer
+      limit:
+        type: integer
+      skip:
+        type: integer
+      previous:
+        type: string
+      next:
+        type: string
+
+  SharingDeviceModel:
+    properties:
+      id:
+        type: integer
+        description: 分享记录id
+      type:
+        type: integer
+        description: 分享类型，0：普通分享，1：二维码分享
+      uid:
+        type: string
+        description: 账号uid，对应主账号或子账号
+      username:
+        type: string
+        description: 账号username,中间4个字母*替代
+      user_alias:
+        type: string
+        description: 昵称备注
+      email:
+        type: string
+        description: 账号email,@前面4个字符*替代
+      phone:
+        type: string
+        description: 账号phone,中间4个数字*替代
+      did:
+        type: string
+        description: 设备did
+      product_name:
+        type: string
+        description: 产品名称
+      dev_alias:
+        type: string
+        description: 设备别名
+      status:
+        type: integer
+        description: 当前分享状态
+      created_at:
+        type: string
+        description: 创建分享时间
+      updated_at:
+        type: string
+        description: 分享状态更新时间
+      expired_at:
+        type: string
+        description: 分享超时时间
+
+  SharingDeviceList:
+    properties:
+      meta:
+        $ref: "#/definitions/SharingDeviceMeta"
+      objects:
+        type: array
+        items:
+          $ref: "#/definitions/SharingDeviceModel"
+
+  SharingCodeModel:
+    properties:
+      owner:
+        type: string
+        description: owner用户信息，手机号|邮箱|用户名|uid
+      product_name:
+        type: string
+        description: 产品名称
+      dev_alias:
+        type: string
+        description: 设备别名
+      expired_at:
+        type: string
+        description: 分享超时时间
+
+  BindingUserItem:
+    properties:
+      created_at:
+        type: string
+        description: 绑定时间
+      uid:
+        type: string
+      username:
+        type: string
+        description: 账号username,中间4个字母*替代
+      email:
+        type: string
+        description: 账号email,@前面4个字符*替代
+      phone:
+        type: string
+        description: 账号phone,中间4个数字*替代
+  BindingUserList:
+    type: array
+    items:
+      $ref: "#/definitions/BindingUserItem"
+
+  AttrItem:
+    properties:
+      id:
+        type: integer
+        description: |
+          Data point identifier
+      name:
+        type: string
+        description: |
+          Data point name
+      display_name:
+        type: string
+        description: |
+          Data point display name
+      desc:
+        type: string
+        description: |
+          hard code, .....
+      type:
+        type: string
+        enum: ['status_writable', 'status_readonly', 'alert', 'fault']
+        description: |
+          - status_writable: writable
+          - status_readonly: readonly
+          - alert: alert
+          - fault: fault
+      data_type:
+        type: string
+        enum: ["bool", "uint8", "uint16", "uint32", "enum", "binary"]
+      uint_spec:
+        type: object
+        description: |
+          When data_type is uint8/uint16/uint32, there is this field
+        properties:
+          min:
+            type: integer
+          max:
+            type: integer
+          ratio:
+            type: number
+          addition:
+            type: integer
+        additionalProperties: false
+      enum:
+        type: array
+        description: |
+          When data_type is enum, there is this field
+        items:
+          type: string
+      position:
+        type: object
+        properties:
+          bit_offset:
+            type: integer
+          len:
+            type: integer
+          unit:
+            type: string
+            enum: ["bit", "byte"]
+          byte_offset:
+            type: integer
+        additionalProperties: false
+    additionalProperties: false
+
+  EntityItem:
+    properties:
+      id:
+        type: integer
+        description: |
+          hard code, 0
+      name:
+        type: string
+        description: |
+          hard code, entity0
+      display_name:
+        type: string
+        description: |
+          hard code, Gizwits Development Kit
+      attrs:
+        type: array
+        items:
+          $ref: "#/definitions/AttrItem"
+    additionalProperties: false
+
+  ElementItem:
+    properties:
+      title:
+        type: string
+        description: |
+          Data point display name
+      key:
+        type: string
+        description: |
+          entity0.{data point identifier}
+      type:
+        type: string
+        enum:
+          - QBooleanElement
+          - QFloatElement
+          - QRadioElement
+          - QMultilineElement
+          - QLabelElement
+      keyboardType:
+        type: string
+        enum:
+          - NumbersAndPunctuation
+          - PhonePad
+      maxLength:
+        type: integer
+        description: |
+          QMultilineElement only has this field
+      items:
+        type: array
+        description: |
+          QRadioElement only has this field
+        items:
+          type: string
+      boolValue:
+        type: boolean
+        description: |
+          type 为 QBooleanElement only has this field
+      bind:
+        type: string
+        description: |
+          type 为 QFloatElement when floatValue:float
+      maximumValue:
+        type: number
+        description: |
+          type 为 QFloatElement only has this field
+      minimumValue:
+        type: number
+        description: |
+          type 为 QFloatElement only has this field
+      value:
+        type: integer
+        description: |
+          type 为 QFloatElement only has this field，为 0
+      object:
+        type: object
+        properties:
+          action:
+            type: string
+            description: |
+              hard code, entity0
+          bind:
+            type: array
+            description: |
+              hard code, entity0.{data point name}
+            items:
+              type: string
+          perm:
+            type: string
+            enum: ["W", "R", "N", "E"]
+            description: |
+              - W: writable
+              - R: readonly
+              - N: alert
+              - E: fault
+          unit_spec:
+            type: object
+            description: |
+              QFloatElement only has this field
+            properties:
+              max:
+                type: integer
+              step:
+                type: integer
+              min:
+                type: integer
+    additionalProperties: false
+
+  SectionItem:
+    properties:
+      elements:
+        type: array
+        items:
+          $ref: "#/definitions/ElementItem"
+    additionalProperties: false
+
+  DataPoint:
+    properties:
+      name:
+        type: string
+        description: Product name
+      entities:
+        type: array
+        items:
+          $ref: "#/definitions/EntityItem"
+      protocolType:
+        type: string
+        description: |
+          hard code, standard
+      product_key:
+        type: string
+      packetVersion:
+        type: string
+        description: |
+          hard code, 0x00000004
+      ui:
+        type: object
+        properties:
+          object:
+            type: object
+            properties:
+              version:
+                type: integer
+                description: |
+                  hard code, 4
+              showEditButton:
+                type: boolean
+                description: |
+                  hard code, false
+          sections:
+            type: array
+            items:
+              $ref: "#/definitions/SectionItem"
+    additionalProperties: false
+
+  GroupModel:
+    type: object
+    properties:
+      id:
+        type: string
+        description: 设备分组 id
+      group_name:
+        type: string
+        description: 设备分组名称
+      product_key:
+        type: string
+        description: 产品 product_key
+      verbose_name:
+        type: string
+        description: 产品名称
+      gw_did:
+        type: string
+        description: 网关设备ID
+      multicast_id:
+        type: string
+        description: 蓝牙组播ID，整型数字字符串，其范围为0~65534
+      remark:
+        type: string
+        description: 分组备注信息
+      created_at:
+        type: string
+        description: 设备分组创建时间（UTC 时间）
+      updated_at:
+        type: string
+        description: 设备分组更新时间（UTC 时间）
+
+  GroupList:
+    type: array
+    items:
+      $ref: "#/definitions/GroupModel"
+
+  GroupDeviceModel:
+    type: object
+    properties:
+      did:
+        type: string
+        description: 设备 did
+      type:
+        type: string
+        description: 设备类型：普通设备(noramal)，中控设备(center_control)，中控子设备(sub_dev)
+      dev_alias:
+        type: string
+        description: 设备别名
+      product_key:
+        type: string
+        description: 产品 product_key
+      verbose_name:
+        type: string
+        description: 产品名称
+
+  GroupDevicesList:
+    type: array
+    items:
+      $ref: "#/definitions/GroupDeviceModel"
+
+  GroupControlResultModel:
+    type: object
+    properties:
+      did:
+        type: string
+        description: 设备 did
+      result:
+        type: boolean
+        description: 是否控制成功
+
+  GroupControlResultList:
+    type: array
+    items:
+      $ref: "#/definitions/GroupControlResultModel"
+
+  SceneTask:
+    properties:
+      task_type:
+        type: string
+        enum: ["delay", "device", "group"]
+        description: |
+          - 场景任务类型：
+          - "delay": 延时任务，
+          - "device": 控制当个设备任务，
+          - "group": 控制设备分组任务
+      time:
+        type: integer
+        description: 可选，针对延时任务，延时时间，以秒为单位，最大值： 3600 秒
+      did:
+        type: string
+        description: 可选，针对单品控制任务，设备 did
+      group_id:
+        type: string
+        description: 可选，针对设备分组控制任务，设备分组 id
+      attrs:
+        type: object
+        description: 可选，针对非延时任务，数据点控制命令，枚举型数据点传序号，扩展型数据点传 base64 编码字符串
+      raw:
+        type: string
+        description: 可选，针对非延时任务，原生控制指令，base64 编码
+      remark:
+        type: string
+        description: 可选，任务备注，后台会自动对内容进行escape转义
+    required:
+      - task_type
+
+  SceneTaskModel:
+    allOf:
+      - $ref: "#/definitions/SceneTask"
+      - properties:
+          product_key:
+            type: string
+            description: 针对非延时任务，产品 product_key
+          verbose_name:
+            type: string
+            description: 针对非延时任务，产品名称
+          group_name:
+            type: string
+            description: 针对设备分组控制任务，设备分组名称
+          dev_alias:
+            type: string
+            description: 针对设备控制任务，设备别名
+          dev_remark:
+            type: string
+            description: 针对设备控制任务，设备备注
+          remark:
+            type: string
+            description: 任务备注，内容已进行escape转义
+
+  SceneModel:
+    type: object
+    properties:
+      id:
+        type: string
+        description: 场景 id
+      scene_name:
+        type: string
+        description: 场景名称
+      remark:
+        type: string
+        description: 场景备注
+      tasks:
+        type: array
+        items:
+          $ref: "#/definitions/SceneTaskModel"
+      created_at:
+        type: string
+        description: 场景创建时间（UTC 时间）
+      updated_at:
+        type: string
+        description: 场景更新时间（UTC 时间）
+
+  SceneList:
+    type: array
+    items:
+      $ref: "#/definitions/SceneModel"
+
+
+  UserSchedulerForm:
+    allOf:
+      - $ref: "#/definitions/DeviceSchedulerForm"
+      - properties:
+          did:
+            type: string
+            description: 设备 did
+          group_id:
+            type: string
+            description: 设备分组 id
+          scene_id:
+            type: string
+            description: 用户场景 id
