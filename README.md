@@ -29,8 +29,7 @@ Available examples (see example folder):
 * discovery.js: Skript to discover devices in the network
 
 ## Changelog
-
-### __WORK IN PROGRESS__
+### 0.4.0 (2024-04-21)
 * (normanr) Update protocol and internals
 
 ### 0.3.0 (2022-05-25)
