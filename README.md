@@ -29,6 +29,10 @@ Available examples (see example folder):
 * discovery.js: Skript to discover devices in the network
 
 ## Changelog
+
+### __WORK IN PROGRESS__
+* (normanr) Update protocol and internals
+
 ### 0.3.0 (2022-05-25)
 * (Apollon77) add isConnected method to device to return the connection status of the device
 
