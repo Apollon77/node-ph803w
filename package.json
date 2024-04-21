@@ -20,12 +20,11 @@
     "eslint": "^8.57.0",
     "mocha": "^10.4.0",
     "sinon": "^17.0.1",
-    "sinon-chai": "^3.7.0",
-    "nyc": "^15.1.0"
+    "sinon-chai": "^3.7.0"
   },
   "scripts": {
     "lint": "eslint \"*.js\" \"lib/**/*.js\"",
-    "test": "DEBUG=ph803w* nyc --reporter=lcov node_modules/mocha/bin/mocha --exit",
+    "test": "DEBUG=ph803w* mocha --exit",
     "release": "release-script"
   },
   "readme": "README.md"
