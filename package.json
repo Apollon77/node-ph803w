@@ -21,7 +21,7 @@
     "@types/varint": "^6.0.0",
     "chai": "^4.4.1",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^8.57.0",
+    "eslint": "^9.1.1",
     "mocha": "^10.4.0",
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0",
